@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Position;
 
 class Employee extends Model
 {
@@ -25,4 +26,9 @@ class Employee extends Model
     protected $hidden = [
         'password',
     ];
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class, 'position_id');
+    }
 }

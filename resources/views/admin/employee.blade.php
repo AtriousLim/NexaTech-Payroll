@@ -27,7 +27,7 @@
 
 <div class="bg-white rounded-2xl shadow">
 
-    <form method="GET" class="p-5 border-b">
+    <form action="{{ route('admin.employees') }}" method="GET" class="p-5 border-b">
         <input
             type="text"
             name="search"
@@ -58,39 +58,33 @@
         </thead>
 
         <tbody>
-
-        @forelse($employees as $emp)
+        @forelse($employees as $employee)
         <tr class="border-b">
-
-            <td class="p-4">{{ $emp->employee_code }}</td>
-
-            <td class="p-4">{{ $emp->first_name }} {{ $emp->last_name }}</td>
-
-            <td class="p-4">{{ $emp->position_title ?? 'Unassigned' }}</td>
-
+            <td class="p-4">{{ $employee->employee_code }}</td>
+            <td class="p-4">{{ $employee->first_name }} {{ $employee->last_name }}</td>
+            <td class="p-4">{{ $employee->position->position_title ?? 'Position ID: ' . $employee->position_id }}</td>
             <td class="p-4">
-
-                @if(strtolower($emp->status) === 'active')
-                    <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">Active</span>
+                @if(strtolower($employee->status) === 'active')
+                    <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm">Active</span>
                 @else
-                    <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-full">Inactive</span>
+                    <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-full text-sm">Inactive</span>
                 @endif
-
             </td>
-
             <td class="p-4">
-
-                <a href="{{ route('admin.employees.view', ['employee' => $emp->id]) }}" class="text-blue-900 font-semibold">View</a>
-
+                <a href="{{ route('admin.employees.view', ['employee' => $employee->id]) }}" class="text-blue-900 font-semibold">View</a>
             </td>
-
         </tr>
         @empty
         <tr>
-            <td class="p-4" colspan="5">No employees found.</td>
+            <td colspan="5" class="p-8 text-center text-slate-500">
+                @if(request('search'))
+                    No employees found matching "{{ request('search') }}".
+                @else
+                    No employees found.
+                @endif
+            </td>
         </tr>
         @endforelse
-
         </tbody>
 
     </table>
