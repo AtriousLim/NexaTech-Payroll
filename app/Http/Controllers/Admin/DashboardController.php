@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Employee;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -17,17 +15,13 @@ class DashboardController extends Controller
 
     public function employees(Request $request)
     {
-        $search = trim($request->query('search', ''));
+        $search = $request->input('search');
 
-        $employees = DB::table('employees')
-            ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
-            ->select('employees.*', 'positions.position_title')
+        $employees = Employee::with('position')
             ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('employees.employee_code', 'like', "%{$search}%")
-                        ->orWhere('employees.first_name', 'like', "%{$search}%")
-                        ->orWhere('employees.last_name', 'like', "%{$search}%");
-                });
+                $query->where('employee_code', 'LIKE', "%{$search}%")
+                      ->orWhere('first_name', 'LIKE', "%{$search}%")
+                      ->orWhere('last_name', 'LIKE', "%{$search}%");
             })
             ->get();
 
@@ -95,7 +89,7 @@ class DashboardController extends Controller
             'contact_number' => 'required|string|max:50',
             'gmail' => 'required|email|unique:employees,gmail',
             'username' => 'required|string|max:100|unique:employees,username',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
             'role' => 'nullable|string',
             'position_id' => 'required|exists:positions,id',
             'status' => 'required|in:Active,Inactive',
