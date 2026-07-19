@@ -29,11 +29,15 @@
 
     <div class="p-5 border-b">
 
-        <input
-            type="text"
-            placeholder="Search employee..."
-            class="w-80 border rounded-xl px-4 py-2">
-
+        <form action="{{ url('/admin/employees') }}" method="GET">
+    <input 
+        type="text" 
+        name="search"
+        value="{{ request('search') }}"
+        placeholder="Search employee..." 
+        class="w-80 border rounded-xl px-4 py-2"
+    >
+</form>
     </div>
 
     <table class="w-full">
@@ -57,97 +61,39 @@
         </thead>
 
         <tbody>
-
+        @forelse($employees as $employee)
         <tr class="border-b">
-
-            <td class="p-4">EMP-001</td>
-
-            <td class="p-4">Juan Dela Cruz</td>
-
-            <td class="p-4">Software Developer</td>
-
+            <td class="p-4">{{ $employee->employee_code }}</td>
+            <td class="p-4">{{ $employee->first_name }} {{ $employee->last_name }}</td>
             <td class="p-4">
-
-                <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">
-
-                    Active
-
-                </span>
-
+                {{-- If you have a position relationship, use $employee->position->name. --}}
+                {{-- Otherwise, this falls back to showing their raw position_id number. --}}
+                {{ $employee->position->name ?? 'Position ID: ' . $employee->position_id }}
             </td>
-
             <td class="p-4">
-
-                <button class="text-blue-900 font-semibold">
-
+                @if(strtolower($employee->status) === 'active')
+                    <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm">
+                        Active
+                    </span>
+                @else
+                    <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-full text-sm">
+                        Inactive
+                    </span>
+                @endif
+            </td>
+            <td class="p-4">
+                <button class="text-blue-900 font-semibold hover:underline">
                     View
-
                 </button>
-
             </td>
-
         </tr>
-
-        <tr class="border-b">
-
-            <td class="p-4">EMP-002</td>
-
-            <td class="p-4">Maria Santos</td>
-
-            <td class="p-4">HR Assistant</td>
-
-            <td class="p-4">
-
-                <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">
-
-                    Active
-
-                </span>
-
-            </td>
-
-            <td class="p-4">
-
-                <button class="text-blue-900 font-semibold">
-
-                    View
-
-                </button>
-
-            </td>
-
-        </tr>
-
+        @empty
         <tr>
-
-            <td class="p-4">EMP-003</td>
-
-            <td class="p-4">Pedro Reyes</td>
-
-            <td class="p-4">Accountant</td>
-
-            <td class="p-4">
-
-                <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-full">
-
-                    Inactive
-
-                </span>
-
+            <td colspan="5" class="p-8 text-center text-slate-500">
+                No employees found matching "{{ request('search') }}".
             </td>
-
-            <td class="p-4">
-
-                <button class="text-blue-900 font-semibold">
-
-                    View
-
-                </button>
-
-            </td>
-
         </tr>
-
+        @endforelse
         </tbody>
 
     </table>
