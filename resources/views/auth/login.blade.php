@@ -15,13 +15,15 @@
 
     <!-- LEFT SIDE -->
 
-    <div class="hidden lg:flex items-center justify-center bg-blue-900 px-9 py-12 lg:sticky lg:top-0 lg:h-screen">
+    <div class="hidden lg:flex items-center justify-center bg-blue-900 p-0 lg:sticky lg:top-0 lg:h-screen overflow-hidden">
 
-        <img
-            src="{{ asset('images/bgg.png') }}"
-            alt="Payroll illustration"
-            class="w-full max-w-xl h-auto object-contain shadow-2xl"
-        >
+        <div class="flex h-full w-full items-center justify-center overflow-hidden">
+            <img
+                src="{{ asset('images/bgg.png') }}"
+                alt="Payroll illustration"
+                class="h-full w-full object-cover"
+            >
+        </div>
 
     </div>
 
