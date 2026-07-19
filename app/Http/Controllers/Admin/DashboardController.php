@@ -48,8 +48,9 @@ class DashboardController extends Controller
     public function createEmployee()
     {
         $positions = DB::table('positions')->select('id','position_title')->get();
+        $nextEmployeeCode = $this->generateEmployeeCode();
 
-        return view('admin.employee-create', compact('positions'));
+        return view('admin.employee-create', compact('positions', 'nextEmployeeCode'));
     }
 
     public function viewEmployee(Employee $employee)
@@ -71,7 +72,6 @@ class DashboardController extends Controller
     public function storeEmployee(Request $request)
     {
         $data = $request->validate([
-            'employee_code' => 'required|string|max:50|unique:employees,employee_code',
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'address' => 'required|string|max:255',
@@ -84,10 +84,11 @@ class DashboardController extends Controller
             'status' => 'required|in:Active,Inactive',
         ]);
 
+        $employeeCode = $this->generateEmployeeCode();
         $posId = $data['position_id'];
 
         Employee::create([
-            'employee_code' => $data['employee_code'],
+            'employee_code' => $employeeCode,
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'address' => $data['address'],
@@ -102,5 +103,19 @@ class DashboardController extends Controller
 
         return redirect()->route('admin.employees')
             ->with('success', 'Employee added successfully.');
+    }
+
+    protected function generateEmployeeCode()
+    {
+        $lastId = Employee::max('id');
+        $nextId = $lastId ? $lastId + 1 : 1;
+        $code = 'EMP-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+
+        while (Employee::where('employee_code', $code)->exists()) {
+            $nextId++;
+            $code = 'EMP-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $code;
     }
 }

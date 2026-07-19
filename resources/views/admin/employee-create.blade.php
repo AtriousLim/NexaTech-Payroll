@@ -54,8 +54,8 @@
                     <div class="grid gap-6 sm:grid-cols-2">
                         <div>
                             <label class="block text-sm font-medium text-slate-700">Employee code</label>
-                            <input type="text" name="employee_code" value="{{ old('employee_code') }}" placeholder="EMP-004" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100" />
-                            @error('employee_code') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                            <input type="text" value="{{ $nextEmployeeCode }}" readonly class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-slate-100 focus:outline-none" />
+                            <p class="mt-2 text-sm text-slate-500">Automatically assigned when saving the employee.</p>
                         </div>
 
                         <div>
