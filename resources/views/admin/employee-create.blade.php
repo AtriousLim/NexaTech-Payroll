@@ -4,22 +4,25 @@
 
 <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
     <div class="space-y-8">
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-20">
             <div>
                 <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee management</p>
-                <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
-                <p class="mt-2 max-w-2xl text-sm text-slate-500">Enter employee details and assign the correct department, position, and credentials for payroll and attendance tracking.</p>
-            </div>
-        </div>
+    <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
+    <p class="mt-1 max-w-2xl text-sm text-slate-500">
+        Enter employee details and assign the correct department, position,
+        and credentials for payroll and attendance tracking.
+    </p>
+</div>
 
-        <div class="grid gap-8 xl:grid-cols-[1.45fr_0.65fr]">
-            <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
-                <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+<div class="mt-10 grid gap-10 xl:grid-cols-[1.45fr_0.65fr]">
+    <div class="overflow-hidden rounded-[3rem] bg-white p-8 shadow-sm">
+                <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee information</p>
                         <h2 class="text-2xl font-semibold text-slate-900">Essential details</h2>
                     </div>
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Professional form</span>
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs 
+                    font-semibold uppercase tracking-[0.2em] text-blue-700">Professional form</span>
                 </div>
 
                 @if(session('success'))
@@ -42,7 +45,7 @@
                 <form method="POST" action="{{ route('admin.employees.store') }}">
                     @csrf
 
-                    <div class="grid gap-6 sm:grid-cols-2">
+                    <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label class="block text-sm font-medium text-slate-700">Employee code</label>
                             <input type="text" value="{{ $nextEmployeeCode }}" readonly class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-slate-100 focus:outline-none" />
@@ -106,7 +109,7 @@
                             @error('password_confirmation') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="sm:col-span-2">
+                        <div class="sm:col-span-10 mt-2">
                             <label class="block text-sm font-medium text-slate-700">Position</label>
                             <select name="position_id" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
                                 <option value="">-- Select position --</option>
@@ -120,8 +123,8 @@
 
                     <input type="hidden" name="role" value="employee">
 
-                    <div class="mt-10 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6">
-                        <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="mt-16 rounded-[1.75rem] bg-slate-50 p-6">
+                        <div class="grid gap-2 sm:grid-cols-2">
                             <div class="rounded-3xl bg-white p-5 shadow-sm">
                                 <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Record info</p>
                                 <p class="mt-2 text-sm text-slate-600">Save employee information once complete. Required fields are marked clearly.</p>
