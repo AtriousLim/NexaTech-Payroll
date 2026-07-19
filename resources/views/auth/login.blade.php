@@ -9,44 +9,19 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
-<body class="bg-slate-100 min-h-screen">
+<body class="bg-slate-100 min-h-screen overflow-hidden">
 
-<div class="min-h-screen grid lg:grid-cols-2">
+<div class="min-h-screen grid lg:grid-cols-2 overflow-hidden">
 
     <!-- LEFT SIDE -->
 
-    <div
-        class="hidden lg:flex flex-col justify-center bg-blue-900 text-white px-20">
+    <div class="hidden lg:flex items-center justify-center bg-blue-900 px-9 py-12 lg:sticky lg:top-0 lg:h-screen">
 
-        <h1 class="text-5xl font-bold leading-tight">
-
-            NexaTech Payroll
-
-        </h1>
-
-        <p class="mt-6 text-lg text-blue-100">
-
-            Payroll Management System
-
-        </p>
-
-        <div class="mt-16">
-
-            <div class="w-24 h-1 bg-teal-500 rounded-full mb-6"></div>
-
-            <p class="text-blue-100 leading-8">
-
-                Secure.
-
-                Professional.
-
-                Fast.
-
-                Built exclusively for Human Resource and Payroll Management.
-
-            </p>
-
-        </div>
+        <img
+            src="{{ asset('images/bgg.png') }}"
+            alt="Payroll illustration"
+            class="w-full max-w-xl h-auto object-contain shadow-2xl"
+        >
 
     </div>
 
