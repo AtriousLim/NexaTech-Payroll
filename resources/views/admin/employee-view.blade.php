@@ -9,20 +9,29 @@
             <h1 class="text-3xl font-semibold text-slate-900">Employee Overview</h1>
             <p class="mt-2 max-w-2xl text-sm text-slate-500">A polished employee dashboard with status, key metrics, and attendance history.</p>
         </div>
-        <a href="{{ route('admin.employees') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white" aria-label="Exit to employee list">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M6 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Exit
-        </a>
+        <div class="flex flex-wrap items-center gap-3 justify-end w-full md:w-auto">
+            <form method="POST" action="{{ route('admin.employees.destroy', ['employee' => $employeeDetail->id]) }}" onsubmit="return confirm('Delete this employee? This action cannot be undone.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 shadow-sm transition hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 focus:ring-offset-white">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Delete employee
+                </button>
+            </form>
+            <a href="{{ route('admin.employees') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white" aria-label="Exit to employee list">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                    <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Exit
+            </a>
+        </div>
     </div>
-
-    <div class="grid gap-6 xl:grid-cols-[1.8fr_1fr]">
-        <div class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                <div class="flex items-center gap-5">
-                    <div class="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-slate-900 text-xl font-semibold text-white">
+    <div class="flex items-center gap-5">
+        <div class="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-slate-900 text-xl font-semibold text-white">
                         {{ strtoupper(substr($employeeDetail->first_name, 0, 1)) }}{{ strtoupper(substr($employeeDetail->last_name, 0, 1)) }}
                     </div>
                     <div>

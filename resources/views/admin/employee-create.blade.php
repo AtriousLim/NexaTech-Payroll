@@ -10,7 +10,7 @@
                 <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
                 <p class="mt-2 max-w-2xl text-sm text-slate-500">Enter employee details and assign the correct department, position, and credentials for payroll and attendance tracking.</p>
             </div>
-            <div class="flex justify-start md:justify-end">
+            <div class="flex justify-end w-full md:w-auto">
                 <a href="{{ route('admin.employees') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white" aria-label="Exit to employee list">
                     <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
                         <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

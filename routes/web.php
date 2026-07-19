@@ -53,6 +53,10 @@ Route::middleware(['auth:admin'])->group(function () {
         [DashboardController::class,'viewEmployee'])
         ->name('admin.employees.view');
 
+    Route::delete('/admin/employees/{employee}',
+        [DashboardController::class,'destroyEmployee'])
+        ->name('admin.employees.destroy');
+
     Route::get('/admin/payroll',
         [DashboardController::class,'payroll'])
         ->name('admin.payroll');

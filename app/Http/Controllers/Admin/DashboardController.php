@@ -69,6 +69,14 @@ class DashboardController extends Controller
         return view('admin.employee-view', compact('employeeDetail', 'attendance'));
     }
 
+    public function destroyEmployee(Employee $employee)
+    {
+        $employee->delete();
+
+        return redirect()->route('admin.employees')
+            ->with('success', 'Employee deleted successfully.');
+    }
+
     public function storeEmployee(Request $request)
     {
         $data = $request->validate([
