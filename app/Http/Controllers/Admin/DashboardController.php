@@ -95,7 +95,7 @@ class DashboardController extends Controller
             'contact_number' => 'required|string|max:50',
             'gmail' => 'required|email|unique:employees,gmail',
             'username' => 'required|string|max:100|unique:employees,username',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
             'role' => 'nullable|string',
             'position_id' => 'required|exists:positions,id',
             'status' => 'required|in:Active,Inactive',

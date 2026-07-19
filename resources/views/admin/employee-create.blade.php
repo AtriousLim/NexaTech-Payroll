@@ -100,6 +100,12 @@
                             @error('password') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Confirm password</label>
+                            <input type="password" name="password_confirmation" placeholder="••••••••" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                            @error('password_confirmation') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                        </div>
+
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-medium text-slate-700">Position</label>
                             <select name="position_id" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
@@ -137,5 +143,7 @@
         </div>
     </div>
 </div>
+
+
 
 @endsection

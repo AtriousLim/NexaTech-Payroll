@@ -44,18 +44,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="grid gap-4 sm:grid-cols-2 lg:w-[260px]">
-                    <div class="rounded-[1.5rem] bg-slate-50 p-4 text-center">
-                        <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Attendance</p>
-                        <p class="mt-3 text-3xl font-semibold text-slate-900">{{ $attendance->count() }}</p>
-                        <p class="mt-1 text-sm text-slate-500">records</p>
-                    </div>
-                    <div class="rounded-[1.5rem] bg-slate-50 p-4 text-center">
-                        <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Last</p>
-                        <p class="mt-3 text-3xl font-semibold text-slate-900">{{ $attendance->first() ? date('M d, Y', strtotime($attendance->first()->date)) : '—' }}</p>
-                        <p class="mt-1 text-sm text-slate-500">latest record</p>
-                    </div>
-                </div>
             </div>
 
             <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

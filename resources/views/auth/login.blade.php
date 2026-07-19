@@ -63,10 +63,19 @@
             </h2>
 
             <p class="text-slate-500 text-center mt-2">
-
                 Sign in to continue
-
             </p>
+
+            @if($errors->any())
+                <div class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                    <p class="font-semibold">Login error</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <!-- Tabs -->
 
