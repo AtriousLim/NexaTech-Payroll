@@ -41,6 +41,22 @@ Route::middleware(['auth:admin'])->group(function () {
         [DashboardController::class,'employees'])
         ->name('admin.employees');
 
+    Route::get('/admin/employees/create',
+        [DashboardController::class,'createEmployee'])
+        ->name('admin.employees.create');
+
+    Route::post('/admin/employees',
+        [DashboardController::class,'storeEmployee'])
+        ->name('admin.employees.store');
+
+    Route::get('/admin/employees/{employee}',
+        [DashboardController::class,'viewEmployee'])
+        ->name('admin.employees.view');
+
+    Route::delete('/admin/employees/{employee}',
+        [DashboardController::class,'destroyEmployee'])
+        ->name('admin.employees.destroy');
+
     Route::get('/admin/payroll',
         [DashboardController::class,'payroll'])
         ->name('admin.payroll');

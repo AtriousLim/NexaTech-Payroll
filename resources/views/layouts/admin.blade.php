@@ -42,7 +42,7 @@ class="block px-6 py-3 transition
 {{ request()->routeIs('admin.employees')
     ? 'bg-teal-600 text-white'
     : 'hover:bg-teal-600' }}">
-👥 Employees
+    ‎  ‎ Employees
 </a>
 
            <a href="{{ route('admin.payroll') }}"
@@ -50,7 +50,7 @@ class="block px-6 py-3 transition
 {{ request()->routeIs('admin.payroll')
     ? 'bg-teal-600 text-white'
     : 'hover:bg-teal-600' }}">
-💰 Payroll
+    ‎  ‎ Payroll
 </a>
 
             @if(Auth::guard('admin')->user()->role != 'Assistant HR')
@@ -60,7 +60,7 @@ class="block px-6 py-3 transition
 {{ request()->routeIs('admin.payroll-history')
     ? 'bg-teal-600 text-white'
     : 'hover:bg-teal-600' }}">
-📜 Payroll History
+    ‎  ‎ Payroll History
 </a>
 
             <a href="{{ route('admin.activity-log') }}"
@@ -68,7 +68,7 @@ class="block px-6 py-3 transition
 {{ request()->routeIs('admin.activity-log')
     ? 'bg-teal-600 text-white'
     : 'hover:bg-teal-600' }}">
-📋 Activity Log
+    ‎  ‎ Activity Log
 </a>
 
             @endif
@@ -80,7 +80,7 @@ class="block px-6 py-3 transition
 {{ request()->routeIs('admin.add-admin')
     ? 'bg-teal-600 text-white'
     : 'hover:bg-teal-600' }}">
-👤 Add Admin User
+    ‎  ‎ Add Admin User
 </a>
 
             @endif
@@ -132,7 +132,7 @@ class="block px-6 py-3 transition
                     @csrf
 
                     <button
-                        class="text-rose-500 hover:underline">
+                        class="inline-flex items-center justify-center rounded-full border border-rose-500 px-3 py-2 text-rose-500 transition hover:bg-rose-50">
 
                         Logout
 
@@ -156,10 +156,8 @@ class="block px-6 py-3 transition
 
 </body>
 
-<footer class="text-center text-gray-500 py-5">
-
-© 2026 NexaTech Payroll Management System
-
+<footer class="bg-gray-200 text-center text-black py-5">
+    © 2026 NexaTech Payroll Management System
 </footer>
 
 </html>
