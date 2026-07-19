@@ -38,15 +38,15 @@
 
     <div class="bg-white rounded-2xl shadow">
 
-        <div class="border-b p-5">
-            <h2 class="font-bold text-xl">
-                Recent Payroll Activity
-            </h2>
-        </div>
+        <div class="bg-gray-200 border-b p-5 rounded-t-lg">
+    <h2 class="font-bold text-xl">
+        Recent Payroll Activity
+    </h2>
+</div>
 
         <table class="w-full">
 
-            <thead class="bg-slate-100">
+            <thead class="bg-gray-100">
 
             <tr>
 
@@ -92,7 +92,7 @@
 
     <div class="bg-white rounded-2xl shadow">
 
-        <div class="border-b p-5">
+        <div class="bg-gray-200 border-b p-5 rounded-t-lg">
 
             <h2 class="font-bold text-xl">
                 Recent System Activity

@@ -16,12 +16,12 @@
 
     </div>
 
-    <button
-        class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-3 rounded-xl shadow">
+    <a href="{{ route('admin.employees.create') }}"
+        class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-3 rounded-xl shadow inline-block">
 
         + Add Employee
 
-    </button>
+    </a>
 
 </div>
 
@@ -58,95 +58,37 @@
 
         <tbody>
 
+        @forelse($employees as $emp)
         <tr class="border-b">
 
-            <td class="p-4">EMP-001</td>
+            <td class="p-4">{{ $emp->employee_code }}</td>
 
-            <td class="p-4">Juan Dela Cruz</td>
+            <td class="p-4">{{ $emp->first_name }} {{ $emp->last_name }}</td>
 
-            <td class="p-4">Software Developer</td>
+            <td class="p-4">{{ $emp->position_title ?? 'Unassigned' }}</td>
 
             <td class="p-4">
 
-                <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">
-
-                    Active
-
-                </span>
+                @if(strtolower($emp->status) === 'active')
+                    <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">Active</span>
+                @else
+                    <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-full">Inactive</span>
+                @endif
 
             </td>
 
             <td class="p-4">
 
-                <button class="text-blue-900 font-semibold">
-
-                    View
-
-                </button>
+                <a href="{{ route('admin.employees.view', ['employee' => $emp->id]) }}" class="text-blue-900 font-semibold">View</a>
 
             </td>
 
         </tr>
-
-        <tr class="border-b">
-
-            <td class="p-4">EMP-002</td>
-
-            <td class="p-4">Maria Santos</td>
-
-            <td class="p-4">HR Assistant</td>
-
-            <td class="p-4">
-
-                <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">
-
-                    Active
-
-                </span>
-
-            </td>
-
-            <td class="p-4">
-
-                <button class="text-blue-900 font-semibold">
-
-                    View
-
-                </button>
-
-            </td>
-
-        </tr>
-
+        @empty
         <tr>
-
-            <td class="p-4">EMP-003</td>
-
-            <td class="p-4">Pedro Reyes</td>
-
-            <td class="p-4">Accountant</td>
-
-            <td class="p-4">
-
-                <span class="bg-rose-100 text-rose-600 px-3 py-1 rounded-full">
-
-                    Inactive
-
-                </span>
-
-            </td>
-
-            <td class="p-4">
-
-                <button class="text-blue-900 font-semibold">
-
-                    View
-
-                </button>
-
-            </td>
-
+            <td class="p-4" colspan="5">No employees found.</td>
         </tr>
+        @endforelse
 
         </tbody>
 
