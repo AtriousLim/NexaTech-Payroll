@@ -15,11 +15,20 @@ class DashboardController extends Controller
         return view('admin.dashboard');
     }
 
-    public function employees()
+    public function employees(Request $request)
     {
+        $search = trim($request->query('search', ''));
+
         $employees = DB::table('employees')
             ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
             ->select('employees.*', 'positions.position_title')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('employees.employee_code', 'like', "%{$search}%")
+                        ->orWhere('employees.first_name', 'like', "%{$search}%")
+                        ->orWhere('employees.last_name', 'like', "%{$search}%");
+                });
+            })
             ->get();
 
         return view('admin.employee', compact('employees'));

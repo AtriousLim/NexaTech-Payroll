@@ -10,15 +10,6 @@
                 <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
                 <p class="mt-2 max-w-2xl text-sm text-slate-500">Enter employee details and assign the correct department, position, and credentials for payroll and attendance tracking.</p>
             </div>
-            <div class="flex justify-end w-full md:w-auto">
-                <a href="{{ route('admin.employees') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white" aria-label="Exit to employee list">
-                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                        <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M6 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    Exit
-                </a>
-            </div>
         </div>
 
         <div class="grid gap-8 xl:grid-cols-[1.45fr_0.65fr]">
@@ -143,32 +134,6 @@
                 </form>
             </div>
 
-            <aside class="rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-sm">
-                <div class="space-y-6">
-                    <div>
-                        <p class="text-sm uppercase tracking-[0.24em] text-slate-400">Form guide</p>
-                        <h2 class="mt-2 text-xl font-semibold text-slate-900">Quick tips</h2>
-                        <p class="mt-2 text-sm text-slate-600">Follow these best practices while adding employee records.</p>
-                    </div>
-
-                    <div class="rounded-3xl bg-white p-5 shadow-sm">
-                        <p class="text-sm font-semibold text-slate-900">What to include</p>
-                        <ul class="mt-3 space-y-3 text-sm text-slate-600">
-                            <li class="flex items-start gap-2"><span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Unique employee code</li>
-                            <li class="flex items-start gap-2"><span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Valid email and username</li>
-                            <li class="flex items-start gap-2"><span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Assigned position for payroll</li>
-                        </ul>
-                    </div>
-
-                    <div class="rounded-3xl bg-white p-5 shadow-sm">
-                        <p class="text-sm font-semibold text-slate-900">Need help?</p>
-                        <ul class="mt-3 space-y-3 text-sm text-slate-600">
-                            <li class="flex items-start gap-2"><span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-slate-400"></span>Use a professional naming style</li>
-                            <li class="flex items-start gap-2"><span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-slate-400"></span>Keep the password secure</li>
-                        </ul>
-                    </div>
-                </div>
-            </aside>
         </div>
     </div>
 </div>
