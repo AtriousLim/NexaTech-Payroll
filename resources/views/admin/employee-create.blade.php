@@ -7,14 +7,15 @@
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-20">
             <div>
                 <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee management</p>
-    <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
-    <p class="mt-1 max-w-2xl text-sm text-slate-500">
-        Enter employee details and assign the correct department, position,
-        and credentials for payroll and attendance tracking.
-    </p>
-</div>
+                <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
+                <p class="mt-1 max-w-2xl text-sm text-slate-500">
+                    Enter employee details and assign the correct department, position,
+                    and credentials for payroll and attendance tracking.
+                </p>
+            </div>
+        </div>
 
-<div class="mt-10 grid gap-10 xl:grid-cols-[1.45fr_0.65fr]">
+        <div class="mt-10 grid gap-10 xl:grid-cols-[1.45fr_0.65fr]">
     <div class="overflow-hidden rounded-[3rem] bg-white p-8 shadow-sm">
                 <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -45,8 +46,8 @@
                 <form method="POST" action="{{ route('admin.employees.store') }}">
                     @csrf
 
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
+                    <div class="flex flex-col gap-4">
+                        <div class="w-full">
                             <label class="block text-sm font-medium text-slate-700">Employee code</label>
                             <input type="text" value="{{ $nextEmployeeCode }}" readonly class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-slate-100 focus:outline-none" />
                             <p class="mt-2 text-sm text-slate-500">Automatically assigned when saving the employee.</p>
