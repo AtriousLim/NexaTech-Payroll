@@ -23,29 +23,36 @@ class DefaultDataSeeder extends Seeder
             $deptId = $dept->id;
         }
 
-        // Ensure default positions exist
+        // Ensure default positions exist with sample salaries
         $defaultPositions = [
-            'Unassigned',
-            'Front-End Developer',
-            'Back-End Developer',
-            'Full-Stack Developer',
-            'Mobile Developer',
-            'Software Architect',
+            ['title' => 'Unassigned', 'salary' => 0.00],
+            ['title' => 'Front-End Developer', 'salary' => 25000.00],
+            ['title' => 'Back-End Developer', 'salary' => 30000.00],
+            ['title' => 'Full-Stack Developer', 'salary' => 35000.00],
+            ['title' => 'Mobile Developer', 'salary' => 28000.00],
+            ['title' => 'Software Architect', 'salary' => 45000.00],
         ];
 
-        foreach ($defaultPositions as $positionTitle) {
-            $exists = DB::table('positions')->where('position_title', $positionTitle)->exists();
+        foreach ($defaultPositions as $pos) {
+            $exists = DB::table('positions')->where('position_title', $pos['title'])->exists();
 
             if (! $exists) {
                 DB::table('positions')->insert([
                     'department_id' => $deptId,
-                    'position_title' => $positionTitle,
-                    'basic_salary' => 0.00,
+                    'position_title' => $pos['title'],
+                    'basic_salary' => $pos['salary'],
                     'has_bonus' => 0,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
+        }
+
+        // Also update existing rows to ensure sample salaries are set
+        foreach ($defaultPositions as $pos) {
+            DB::table('positions')
+                ->where('position_title', $pos['title'])
+                ->update(['basic_salary' => $pos['salary'], 'updated_at' => now()]);
         }
     }
 }

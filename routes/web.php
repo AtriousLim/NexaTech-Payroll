@@ -53,6 +53,14 @@ Route::middleware(['auth:admin'])->group(function () {
         [DashboardController::class,'viewEmployee'])
         ->name('admin.employees.view');
 
+    Route::get('/admin/employees/{employee}/edit',
+        [DashboardController::class,'editEmployee'])
+        ->name('admin.employees.edit');
+
+    Route::patch('/admin/employees/{employee}',
+        [DashboardController::class,'updateEmployee'])
+        ->name('admin.employees.update');
+
     Route::delete('/admin/employees/{employee}',
         [DashboardController::class,'destroyEmployee'])
         ->name('admin.employees.destroy');

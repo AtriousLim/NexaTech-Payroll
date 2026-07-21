@@ -52,7 +52,7 @@ class DashboardController extends Controller
 
     public function createEmployee()
     {
-        $positions = DB::table('positions')->select('id','position_title')->get();
+        $positions = DB::table('positions')->select('id','position_title','basic_salary')->get();
         $nextEmployeeCode = $this->generateEmployeeCode();
 
         return view('admin.employee-create', compact('positions', 'nextEmployeeCode'));
@@ -72,6 +72,50 @@ class DashboardController extends Controller
             ->get();
 
         return view('admin.employee-view', compact('employeeDetail', 'attendance'));
+    }
+
+    public function editEmployee(Employee $employee)
+    {
+        $positions = DB::table('positions')->select('id','position_title')->get();
+
+        return view('admin.employee-edit', compact('employee', 'positions'));
+    }
+
+    public function updateEmployee(Request $request, Employee $employee)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:50',
+            'gmail' => 'required|email|unique:employees,gmail,' . $employee->id,
+            'username' => 'required|string|max:100|unique:employees,username,' . $employee->id,
+            'password' => 'nullable|string|min:6',
+            'role' => 'nullable|string',
+            'position_id' => 'required|exists:positions,id',
+            'status' => 'required|in:Active,Inactive',
+        ]);
+
+        $update = [
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'address' => $data['address'],
+            'contact_number' => $data['contact_number'],
+            'gmail' => $data['gmail'],
+            'username' => $data['username'],
+            'role' => $data['role'] ?? $employee->role,
+            'position_id' => $data['position_id'],
+            'status' => $data['status'],
+        ];
+
+        if (!empty($data['password'])) {
+            $update['password'] = Hash::make($data['password']);
+        }
+
+        $employee->update($update);
+
+        return redirect()->route('admin.employees')
+            ->with('success', 'Employee updated successfully.');
     }
 
     public function destroyEmployee(Employee $employee)

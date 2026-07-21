@@ -71,7 +71,8 @@
                 @endif
             </td>
             <td class="p-4">
-                <a href="{{ route('admin.employees.view', ['employee' => $employee->id]) }}" class="text-blue-900 font-semibold">View</a>
+                <a href="{{ route('admin.employees.view', ['employee' => $employee->id]) }}" class="text-blue-900 font-semibold mr-4">View</a>
+                <a href="{{ route('admin.employees.edit', ['employee' => $employee->id]) }}" class="text-indigo-600 font-semibold">Edit</a>
             </td>
         </tr>
         @empty

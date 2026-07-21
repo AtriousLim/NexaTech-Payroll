@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-sm">
+            <div class="mt-6 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-sm">
                 <h2 class="text-lg font-semibold text-slate-900">Quick details</h2>
                 <div class="mt-5 grid gap-4 text-sm text-slate-700 sm:grid-cols-2">
                     <div class="rounded-3xl bg-white p-4 shadow-sm">
@@ -112,7 +112,7 @@
                                 <th class="px-4 py-3">Time In</th>
                                 <th class="px-4 py-3">Time Out</th>
                                 <th class="px-4 py-3">Late</th>
-                                <th class="px-4 py-3">Overtime</th>
+                                <th class="px-4 py-3">Overtime</th>     
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 bg-white">
@@ -121,8 +121,8 @@
                                     <td class="px-4 py-4 text-sm text-slate-700">{{ date('M d, Y', strtotime($record->date)) }}</td>
                                     <td class="px-4 py-4 text-sm text-slate-700">{{ $record->time_in ?? '—' }}</td>
                                     <td class="px-4 py-4 text-sm text-slate-700">{{ $record->time_out ?? '—' }}</td>
-                                    <td class="px-4 py-4 text-sm text-slate-700">{{ $record->late_minutes }} min</td>
-                                    <td class="px-4 py-4 text-sm text-slate-700">{{ $record->overtime_minutes }} min</td>
+                                    <td class="px-4 py-4 text-sm text-slate-700">{{ $record->late_minutes }}  min</td>
+                                    <td class="px-4 py-4 text-sm text-slate-700">{{ $record->overtime_minutes }}  min</td>
                                 </tr>
                             @endforeach
                         </tbody>

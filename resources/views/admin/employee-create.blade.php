@@ -112,13 +112,18 @@
 
                         <div class="sm:col-span-10 mt-2">
                             <label class="block text-sm font-medium text-slate-700">Position</label>
-                            <select name="position_id" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
+                            <select id="position_id" name="position_id" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100">
                                 <option value="">-- Select position --</option>
                                 @foreach($positions as $pos)
                                     <option value="{{ $pos->id }}" {{ old('position_id') == $pos->id ? 'selected' : '' }}>{{ $pos->position_title }}</option>
                                 @endforeach
                             </select>
                             @error('position_id') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="sm:col-span-10 mt-2">
+                            <label class="block text-sm font-medium text-slate-700">Salary</label>
+                            <input id="position_salary" type="text" readonly value="{{ old('position_id') ? ($positions->firstWhere('id', old('position_id'))->basic_salary ?? '') : '' }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-700 transition focus:border-blue-500 focus:bg-slate-100 focus:outline-none" />
                         </div>
                     </div>
 
@@ -142,6 +147,24 @@
                         </div>
                     </div>
                 </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const positionSelect = document.getElementById('position_id');
+                        const salaryInput = document.getElementById('position_salary');
+                        const salaries = @json($positions->mapWithKeys(function($pos){ return [$pos->id => $pos->basic_salary]; }));
+
+                        function updateSalary() {
+                            const salaryValue = salaries[positionSelect.value] ?? '';
+                            salaryInput.value = salaryValue;
+                        }
+
+                        if (positionSelect) {
+                            positionSelect.addEventListener('change', updateSalary);
+                            updateSalary();
+                        }
+                    });
+                </script>
             </div>
 
         </div>
