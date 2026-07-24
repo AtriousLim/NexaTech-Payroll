@@ -4,7 +4,7 @@
 
 <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
     <div class="space-y-8">
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-20">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-10">
             <div>
                 <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee management</p>
                 <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
@@ -15,9 +15,9 @@
             </div>
         </div>
 
-        <div class="mt-10 grid gap-10 xl:grid-cols-[1.45fr_0.65fr]">
+        <div class="mt-5 grid gap-5 xl:grid-cols-[1.45fr_0.65fr]">
     <div class="overflow-hidden rounded-[3rem] bg-white p-8 shadow-sm">
-                <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee information</p>
                         <h2 class="text-2xl font-semibold text-slate-900">Essential details</h2>
@@ -127,6 +127,8 @@
                         </div>
                     </div>
 
+                    <div id="salary-data" data-salaries='@json($salaries)' class="hidden"></div>
+
                     <input type="hidden" name="role" value="employee">
 
                     <div class="mt-16 rounded-[1.75rem] bg-slate-50 p-6">
@@ -152,11 +154,15 @@
                     document.addEventListener('DOMContentLoaded', function () {
                         const positionSelect = document.getElementById('position_id');
                         const salaryInput = document.getElementById('position_salary');
-                        const salaries = @json($positions->mapWithKeys(function($pos){ return [$pos->id => $pos->basic_salary]; }));
+                        const salaryData = document.getElementById('salary-data');
+                        const salaries = salaryData ? JSON.parse(salaryData.dataset.salaries || '{}') : {};
 
                         function updateSalary() {
-                            const salaryValue = salaries[positionSelect.value] ?? '';
-                            salaryInput.value = salaryValue;
+                            const sel = positionSelect ? positionSelect.value : null;
+                            const salaryValue = salaries && sel ? (salaries[sel] ?? '') : '';
+                            if (salaryInput) {
+                                salaryInput.value = salaryValue;
+                            }
                         }
 
                         if (positionSelect) {

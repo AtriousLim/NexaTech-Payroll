@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,12 +51,35 @@ class DashboardController extends Controller
         return view('admin.add-admin');
     }
 
+    public function storeAdmin(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email',
+            'password' => 'required|string|min:6|confirmed',
+            'role' => 'required|string|max:255',
+        ]);
+
+        Admin::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
+        ]);
+
+        return redirect()->route('admin.add-admin')
+            ->with('success', 'Admin added successfully.');
+    }
+
     public function createEmployee()
     {
         $positions = DB::table('positions')->select('id','position_title','basic_salary')->get();
         $nextEmployeeCode = $this->generateEmployeeCode();
 
-        return view('admin.employee-create', compact('positions', 'nextEmployeeCode'));
+        // prepare a simple id => salary map for the view (avoid closures in Blade)
+        $salaries = $positions->pluck('basic_salary', 'id');
+
+        return view('admin.employee-create', compact('positions', 'nextEmployeeCode', 'salaries'));
     }
 
     public function viewEmployee(Employee $employee)
