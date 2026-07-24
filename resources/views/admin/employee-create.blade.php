@@ -2,31 +2,7 @@
 
 @section('content')
 
-<<<<<<< HEAD
 <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-    <div class="space-y-8">
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-10">
-            <div>
-                <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee management</p>
-                <h1 class="text-3xl font-semibold text-slate-900">Create employee profile</h1>
-                <p class="mt-1 max-w-2xl text-sm text-slate-500">
-                    Enter employee details and assign the correct department, position,
-                    and credentials for payroll and attendance tracking.
-                </p>
-            </div>
-        </div>
-
-        <div class="mt-5 grid gap-5 xl:grid-cols-[1.45fr_0.65fr]">
-    <div class="overflow-hidden rounded-[3rem] bg-white p-8 shadow-sm">
-                <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                        <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee information</p>
-                        <h2 class="text-2xl font-semibold text-slate-900">Essential details</h2>
-                    </div>
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs 
-                    font-semibold uppercase tracking-[0.2em] text-blue-700">Professional form</span>
-=======
-<div class="max-w-6xl mx-auto px-.1 py-.1 sm:px-6 lg:px-8">
     <div class="space-y-4">
         <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-4">
@@ -52,7 +28,6 @@
                 <div>
                     <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Employee information</p>
                     <h2 class="mt-2 text-2xl font-semibold text-slate-900">Essential details</h2>
->>>>>>> 367c8020743982a19949f7c6b90600e5f42af8c8
                 </div>
                 <span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
                     Professional form
@@ -97,10 +72,10 @@
                     </div>
 
                     <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-                            <div class="flex items-center gap-2 border-b border-slate-200 pb-4">
+                        <div class="flex items-center gap-2 border-b border-slate-200 pb-4">
                             <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 4z" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M6 20c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </span>
@@ -141,7 +116,7 @@
                                 <select name="gender" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
                                     <option value="Male" {{ old('gender') === 'Male' ? 'selected' : '' }}>Male</option>
                                     <option value="Female" {{ old('gender') === 'Female' ? 'selected' : '' }}>Female</option>
-                                    <option value="Other" {{ old('gender') === 'Other' ? 'selected' : '' }}>LTFRB</option>
+                                    <option value="Other" {{ old('gender') === 'Other' ? 'selected' : '' }}>Other</option>
                                 </select>
                                 @error('gender') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
@@ -200,8 +175,6 @@
                         </div>
                     </div>
 
-                    <div id="salary-data" data-salaries='@json($salaries)' class="hidden"></div>
-
                     <input type="hidden" name="role" value="employee">
 
                     <div class="flex flex-col gap-2 rounded-[1.5rem] border border-slate-200 bg-white p-5 sm:flex-row sm:justify-end">
@@ -211,30 +184,6 @@
                 </div>
             </form>
 
-<<<<<<< HEAD
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const positionSelect = document.getElementById('position_id');
-                        const salaryInput = document.getElementById('position_salary');
-                        const salaryData = document.getElementById('salary-data');
-                        const salaries = salaryData ? JSON.parse(salaryData.dataset.salaries || '{}') : {};
-
-                        function updateSalary() {
-                            const sel = positionSelect ? positionSelect.value : null;
-                            const salaryValue = salaries && sel ? (salaries[sel] ?? '') : '';
-                            if (salaryInput) {
-                                salaryInput.value = salaryValue;
-                            }
-                        }
-
-                        if (positionSelect) {
-                            positionSelect.addEventListener('change', updateSalary);
-                            updateSalary();
-                        }
-                    });
-                </script>
-            </div>
-=======
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const positionSelect = document.getElementById('position_id');
@@ -242,9 +191,10 @@
                     const salaries = @json($positions->mapWithKeys(function($pos){ return [$pos->id => $pos->basic_salary]; }));
 
                     function updateSalary() {
-                        salaryInput.value = salaries[positionSelect.value] ?? '';
+                        if (salaryInput && positionSelect) {
+                            salaryInput.value = salaries[positionSelect.value] ?? '';
+                        }
                     }
->>>>>>> 367c8020743982a19949f7c6b90600e5f42af8c8
 
                     if (positionSelect) {
                         positionSelect.addEventListener('change', updateSalary);
