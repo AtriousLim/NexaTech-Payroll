@@ -92,6 +92,10 @@ Route::middleware(['auth:admin'])->group(function () {
         [DashboardController::class,'addAdmin'])
         ->name('admin.add-admin');
 
+    Route::post('/admin/add-admin',
+        [DashboardController::class,'storeAdmin'])
+        ->name('admin.add-admin.store');
+
 });
 
 use Illuminate\Http\Request;
