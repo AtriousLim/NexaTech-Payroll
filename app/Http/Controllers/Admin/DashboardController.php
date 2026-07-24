@@ -20,7 +20,7 @@ class DashboardController extends Controller
     {
         $search = $request->input('search');
 
-        $employees = Employee::with('position')
+        $employees = Employee::with('position.department')
             ->when($search, function ($query, $search) {
                 $query->where('employee_code', 'LIKE', "%{$search}%")
                       ->orWhere('first_name', 'LIKE', "%{$search}%")

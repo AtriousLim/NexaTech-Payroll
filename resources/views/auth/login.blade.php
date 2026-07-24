@@ -9,9 +9,11 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
-<body class="min-h-screen overflow-hidden" style="background-image: url('{{ asset('images/lastt.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body class="relative min-h-screen overflow-hidden">
 
-<div class="min-h-screen grid lg:grid-cols-2 overflow-hidden">
+<img src="{{ asset('images/lastt.png') }}" alt="" class="absolute inset-0 h-full w-full object-cover">
+
+<div class="relative z-10 min-h-screen grid lg:grid-cols-2 overflow-hidden">
 
     <!-- LEFT SIDE -->
 

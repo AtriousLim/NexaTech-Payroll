@@ -76,7 +76,7 @@
                                 <td class="px-6 py-4">{{ $employee->employee_code }}</td>
                                 <td class="px-6 py-4">{{ $employee->first_name }} {{ $employee->last_name }}</td>
                                 <td class="px-6 py-4">{{ $employee->position->position_title ?? 'N/A' }}</td>
-                                <td class="px-6 py-4">{{ $employee->department ?? 'N/A' }}</td>
+                                <td class="px-6 py-4">{{ $employee->position->department->department_name ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">
                                     @if(strtolower($employee->status) === 'active')
                                         <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">Active</span>
