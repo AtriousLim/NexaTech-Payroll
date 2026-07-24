@@ -29,7 +29,7 @@
 
    <form method="GET"
       action="{{ route('admin.payroll') }}"
-      class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8">
+      class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8 ">
 
     <input
         type="text"
@@ -95,8 +95,8 @@
     </button>
 
 </form>
-
-    <div class="overflow-x-auto mt-8">
+            <!--form of employee table-->
+    <div class="overflow-x-auto mt-8 border border-slate-200 rounded-xl bg-white shadow-sm">
 
         <table class="min-w-full">
 
@@ -161,9 +161,9 @@
 
                        <a
                             href="{{ route('admin.payroll.preview',$employee->id) }}"
-                            class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg inline-block">
+                            class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
 
-                            PAY
+                            Pay
 
                         </a>
 

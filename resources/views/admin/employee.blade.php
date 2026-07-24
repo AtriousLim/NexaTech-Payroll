@@ -1,76 +1,64 @@
 @extends('layouts.admin')
 
 @section('content')
-<!--gap sa navbar-->
-<div class="mx-auto max-w-6xl space-y-2 px-2 py-.1 sm:px-6 lg:px-8">
-    <div class="bg-white rounded-3xl p-4 shadow-lg border border-slate-200">
-        <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
-            <div class="flex items-center gap-2">
-                <div class="inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-sky-100 text-sky-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
-                        <path d="M17 4H7a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3zm1 13a1 1 0 01-1 1H7a1 1 0 01-1-1V7a1 1 0 011-1h10a1 1 0 011 1v10z" />
-                        <path d="M9 9h6M9 12h4M9 15h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-900">Employee Management</h1>
-                    <p class="text-slate-500 mt-1">Manage employee information and records.</p>
-                </div>
-            </div>
-
-            <a href="{{ route('admin.employees.create') }}" class="inline-flex items-center gap-2 rounded-2xl bg-blue-900 px-4 py-2.5 text-white shadow-lg transition hover:bg-blue-800">
-                <span class="text-lg">+</span>
-                Add Employee
-            </a>
+<div class="bg-white rounded-2xl shadow p-6 ">
+    <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Employee Management</h1>
+            <p class="text-slate-500 mt-1">Manage employee information and records.</p>
         </div>
+        <a href="{{ route('admin.employees.create') }}" class="inline-flex items-center gap-2 rounded-2xl bg-blue-900 px-4 py-2.5 text-white shadow-lg transition hover:bg-blue-800">
+            <span class="text-lg">+</span>
+            Add Employee
+        </a>
     </div>
+                <!--search buttons-->
+        <form action="{{ route('admin.employees') }}" method="GET" class="grid grid-cols-1 gap-3 mt-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto]">
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search employee by name, code, position..."
+                class="w-full border rounded-lg border border-black-200 bg-white px-4 py-2 text-medium text-slate-900 focus:border-slate-300 focus:outline-none focus:ring-0"
+                autocomplete="off">
 
-    <div class="bg-white rounded-3xl p-4 shadow-lg border border-slate-200">
-        <div class="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
-            <form action="{{ route('admin.employees') }}" method="GET" class="flex-1">
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ request('search') }}"
-                    placeholder="Search employee by name, code, position..."
-                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-700 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
-                    autocomplete="off">
-            </form>
+            <select name="department" class="rounded-lg border border-black-200 bg-white px-4 py-3 text-slate-900 focus:border-slate-300 focus:outline-none focus:ring-0">
+                <option value="">All Departments</option>
+                <option value="HR" @selected(request('department') == 'HR')>HR</option>
+                <option value="Finance" @selected(request('department') == 'Finance')>Finance</option>
+                <option value="Operations" @selected(request('department') == 'Operations')>Operations</option>
+            </select>
 
-            <div class="grid gap-1 sm:grid-cols-3 xl:w-2/5">
-                <select name="department" class="rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-slate-700 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200">
-                    <option>All Departments</option>
-                    <option>HR</option>
-                    <option>Finance</option>
-                    <option>Operations</option>
-                </select>
-                <select name="status" class="rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-slate-700 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200">
-                    <option>All Status</option>
-                    <option>Active</option>
-                    <option>Inactive</option>
-                </select>
-                <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-4 py-2.5 text-white shadow-lg transition hover:bg-slate-800">
-                    Filter
-                </button>
-            </div>
+            <select name="status" class="rounded-lg border border-black-200 bg-white px-4 py-3 text-slate-900 focus:border-slate-300 focus:outline-none focus:ring-0">
+                <option value="">All Status</option>
+                <option value="Active" @selected(request('status') == 'Active')>Active</option>
+                <option value="Inactive" @selected(request('status') == 'Inactive')>Inactive</option>
+            </select>
+
+            <button type="submit" class="rounded-lg bg-blue-900 px-6 py-3 text-white transition hover:bg-blue-800">
+                Filter
+            </button>
+        </form>
+
+        <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p class="text-sm text-slate-600">Showing {{ $employees->count() }} {{ $employees->count() === 1 ? 'employee' : 'employees' }}</p>
+            <p class="text-sm text-slate-600">Total {{ $employees->count() }} records</p>
         </div>
-    </div>
 
-    <div class="bg-white rounded-3xl p-5 shadow-lg border border-slate-200">
-        @if($employees->count())
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200 text-sm text-slate-700">
-                    <thead class="bg-slate-50 text-slate-600">
+        <div class="overflow-x-auto mt-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+            @if($employees->count())
+                <table class="min-w-full divide-y divide-slate-200 text-sm text-black-700">
+                    <thead class="bg-slate-50 text-black-600">
                         <tr>
-                            <th class="px-6 py-4 text-left font-semibold uppercase tracking-wide">Employee Code</th>
-                            <th class="px-6 py-4 text-left font-semibold uppercase tracking-wide">Employee Name</th>
-                            <th class="px-6 py-4 text-left font-semibold uppercase tracking-wide">Position</th>
-                            <th class="px-6 py-4 text-left font-semibold uppercase tracking-wide">Department</th>
-                            <th class="px-6 py-4 text-left font-semibold uppercase tracking-wide">Status</th>
-                            <th class="px-6 py-4 text-left font-semibold uppercase tracking-wide">Action</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Employee Code</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Employee Name</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Position</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Department</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Status</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 bg-white">
+                    <tbody class="divide-y divide-black-200 bg-white">
                         @foreach($employees as $employee)
                             <tr>
                                 <td class="px-6 py-4">{{ $employee->employee_code }}</td>
@@ -91,24 +79,24 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-        @else
-            <div class="grid place-items-center gap-6 py-16 text-center">
-                <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 text-sky-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-10 w-10">
-                        <path d="M8 7h8M8 11h8M9 15h6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+            @else
+                <div class="grid place-items-center gap-6 py-16 text-center">
+                    <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 text-sky-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-10 w-10">
+                            <path d="M8 7h8M8 11h8M9 15h6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-slate-900">No employees found</h2>
+                        <p class="text-slate-500 mt-2">Get started by adding a new employee to the system.</p>
+                    </div>
+                    <a href="{{ route('admin.employees.create') }}" class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-2 rounded-lg">
+                        + Add Employee
+                    </a>
                 </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">No employees found</h2>
-                    <p class="text-slate-500 mt-2">Get started by adding a new employee to the system.</p>
-                </div>
-                <a href="{{ route('admin.employees.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-blue-900 px-6 py-3 text-white shadow-lg transition hover:bg-blue-800">
-                    + Add Employee
-                </a>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>
 
