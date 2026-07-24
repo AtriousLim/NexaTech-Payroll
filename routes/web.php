@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PayrollController;
+
 
 
 /*
@@ -66,8 +68,17 @@ Route::middleware(['auth:admin'])->group(function () {
         ->name('admin.employees.destroy');
 
     Route::get('/admin/payroll',
-        [DashboardController::class,'payroll'])
+        [PayrollController::class,'index'])
         ->name('admin.payroll');
+
+    Route::get('/admin/positions/{department}', [PayrollController::class, 'getPositions'])
+        ->name('admin.positions');
+
+    Route::get('/admin/payroll/{employee}/preview', [PayrollController::class, 'preview'])
+        ->name('admin.payroll.preview');    
+
+    Route::post('/admin/payroll/{employee}/process', [PayrollController::class,'process'])
+        ->name('admin.payroll.process');
 
     Route::get('/admin/payroll-history',
         [DashboardController::class,'payrollHistory'])
