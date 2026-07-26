@@ -149,21 +149,27 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-slate-700">
-                        <tr>
-                            <td class="px-4 py-6"><span class="inline-flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>EMP-001</span></td>
-                            <td class="px-4 py-6">Jul 1 – Jul 15, 2025</td>
-                            <td class="px-4 py-6"><span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-600"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Paid</span></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-6"><span class="inline-flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>EMP-002</span></td>
-                            <td class="px-4 py-6">Jul 1 – Jul 15, 2025</td>
-                            <td class="px-4 py-6"><span class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-600"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-6"><span class="inline-flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>EMP-003</span></td>
-                            <td class="px-4 py-6">Jul 1 – Jul 15, 2025</td>
-                            <td class="px-4 py-6"><span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-600"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Paid</span></td>
-                        </tr>
+                        @forelse($recentPayrolls as $payroll)
+                            <tr>
+                                <td class="px-4 py-6">
+                                    <span class="inline-flex items-center gap-3">
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>
+                                        {{ $payroll->employee->employee_code ?? 'N/A' }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-6">{{ \Carbon\Carbon::parse($payroll->cutoff_start)->format('M d') }} – {{ \Carbon\Carbon::parse($payroll->cutoff_end)->format('M d, Y') }}</td>
+                                <td class="px-4 py-6">
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-600">
+                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        {{ $payroll->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="py-12 text-center text-sm text-slate-500">No recent payroll activity.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

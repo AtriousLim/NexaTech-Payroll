@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Department;
+use App\Models\PayrollHistory;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +19,13 @@ class DashboardController extends Controller
             ->orderByDesc('created_at')
             ->limit(5)
             ->get(['action', 'created_at']);
-
-        return view('admin.dashboard', compact('recentActivities'));
+        
+        $recentPayrolls = PayrollHistory::with('employee')
+            ->orderByDesc('created_at')
+            ->limit(3)
+            ->get();
+            
+        return view('admin.dashboard', compact('recentActivities', 'recentPayrolls'));
     }
 
     public function employees(Request $request)
