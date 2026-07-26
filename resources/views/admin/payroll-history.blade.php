@@ -91,9 +91,36 @@
             </table>
         </div>
 
-        @if(method_exists($payrolls, 'links'))
-            <div class="p-4 border-t border-slate-200">
-                {{ $payrolls->links() }}
+        @if($payrolls->hasPages())
+            <div class="flex flex-col gap-4 border-t border-slate-200 bg-slate-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="text-sm font-medium text-slate-600">
+                    Page {{ $payrolls->currentPage() }} of {{ $payrolls->lastPage() }}
+                </div>
+                <div class="inline-flex items-center gap-2 rounded-full bg-white p-1 shadow-sm ring-1 ring-slate-200">
+                    @if($payrolls->onFirstPage())
+                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-400">
+                            ‹
+                        </span>
+                    @else
+                        <a href="{{ $payrolls->previousPageUrl() }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-700 transition hover:bg-slate-100">
+                            ‹
+                        </a>
+                    @endif
+
+                    <span class="inline-flex h-10 min-w-[2.5rem] items-center justify-center rounded-full bg-slate-100 px-3 text-sm font-semibold text-slate-700">
+                        {{ $payrolls->currentPage() }}
+                    </span>
+
+                    @if($payrolls->hasMorePages())
+                        <a href="{{ $payrolls->nextPageUrl() }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-700 transition hover:bg-slate-100">
+                            ›
+                        </a>
+                    @else
+                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-400">
+                            ›
+                        </span>
+                    @endif
+                </div>
             </div>
         @endif
     </div>

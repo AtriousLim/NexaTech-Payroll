@@ -125,7 +125,7 @@
                         <tbody class="divide-y divide-slate-200 bg-white">
                             @foreach($attendance as $record)
                                 <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-4 py-4 text-sm text-slate-700">{{ date('M d, Y', strtotime($record->date)) }}</td>
+                                    <td class="px-4 py-4 text-sm text-slate-700">{{ date('M d, Y', strtotime($record->attendance_date)) }}</td>
                                     <td class="px-4 py-4 text-sm text-slate-700">{{ $record->time_in ?? '—' }}</td>
                                     <td class="px-4 py-4 text-sm text-slate-700">{{ $record->time_out ?? '—' }}</td>
                                     <td class="px-4 py-4 text-sm text-slate-700">{{ $record->late_minutes }}  min</td>

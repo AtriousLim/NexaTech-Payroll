@@ -189,7 +189,7 @@ class DashboardController extends Controller
 
         $attendance = DB::table('attendances')
             ->where('employee_id', $employee->id)
-            ->orderBy('date', 'desc')
+            ->orderBy('attendance_date', 'desc')
             ->get();
 
         return view('admin.employee-view', compact('employeeDetail', 'attendance'));
