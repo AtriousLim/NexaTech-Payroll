@@ -118,87 +118,116 @@
 
 </div>
 
-<div class="grid lg:grid-cols-2 gap-6 mt-8">
-
-    <div class="bg-white rounded-2xl shadow">
-
-        <div class="bg-gray-200 border-b p-5 rounded-t-lg">
-    <h2 class="font-bold text-xl">
-        Recent Payroll Activity
-    </h2>
-</div>
-
-        <table class="w-full">
-
-            <thead class="bg-gray-100">
-
-            <tr>
-
-                <th class="text-left p-4">Employee</th>
-                <th class="text-left p-4">Period</th>
-                <th class="text-left p-4">Status</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody>
-
-            <tr class="border-b">
-
-                <td class="p-4">EMP-001</td>
-                <td class="p-4">July 1-15</td>
-                <td class="p-4 text-emerald-500 font-semibold">Paid</td>
-
-            </tr>
-
-            <tr class="border-b">
-
-                <td class="p-4">EMP-002</td>
-                <td class="p-4">July 1-15</td>
-                <td class="p-4 text-rose-500 font-semibold">Pending</td>
-
-            </tr>
-
-            <tr>
-
-                <td class="p-4">EMP-003</td>
-                <td class="p-4">July 1-15</td>
-                <td class="p-4 text-emerald-500 font-semibold">Paid</td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <div class="bg-white rounded-2xl shadow">
-
-        <div class="bg-gray-200 border-b p-5 rounded-t-lg">
-
-            <h2 class="font-bold text-xl">
-                Recent System Activity
-            </h2>
-
-        </div>
-
-        <div class="p-5 space-y-4">
-            @forelse($recentActivities as $activity)
-                <div class="flex items-start justify-between gap-4">
-                    <span class="text-slate-800">{{ $activity->action }}</span>
-                    <span class="shrink-0 text-sm text-slate-500">
-                        {{ \Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}
-                    </span>
+<div class="mt-8 grid gap-6 lg:grid-cols-2">
+    <section class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 p-5">
+            <div class="flex items-center gap-3">
+                <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6">
+                        <path d="M4 7h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke-linejoin="round" />
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M15 13h.01" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Recent Payroll Activity</h2>
+                    <p class="mt-0.5 text-sm text-slate-500">Overview of the most recent payroll transactions.</p>
                 </div>
-            @empty
-                <p class="text-sm text-slate-500">No recent system activity.</p>
-            @endforelse
+            </div>
+            <a href="{{ route('admin.payroll-history') }}" class="inline-flex items-center gap-1 rounded-lg border border-blue-200 px-3 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
+                View All <span aria-hidden="true">›</span>
+            </a>
         </div>
 
-    </div>
+        <div class="p-5">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[480px] text-left text-sm">
+                    <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        <tr>
+                            <th class="rounded-l-lg px-4 py-4">Employee ID</th>
+                            <th class="px-4 py-4">Payroll Period</th>
+                            <th class="rounded-r-lg px-4 py-4">Payment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                        <tr>
+                            <td class="px-4 py-6"><span class="inline-flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>EMP-001</span></td>
+                            <td class="px-4 py-6">Jul 1 – Jul 15, 2025</td>
+                            <td class="px-4 py-6"><span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-600"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-6"><span class="inline-flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>EMP-002</span></td>
+                            <td class="px-4 py-6">Jul 1 – Jul 15, 2025</td>
+                            <td class="px-4 py-6"><span class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-600"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-6"><span class="inline-flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-500">●</span>EMP-003</span></td>
+                            <td class="px-4 py-6">Jul 1 – Jul 15, 2025</td>
+                            <td class="px-4 py-6"><span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-600"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Paid</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <a href="{{ route('admin.payroll-history') }}" class="flex items-center justify-center gap-2 border-t border-slate-100 px-5 py-4 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
+            View all payroll records <span aria-hidden="true">›</span>
+        </a>
+    </section>
+
+    <section class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 p-5">
+            <div class="flex items-center gap-3">
+                <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6"><path d="M3 12h3l2-7 4 14 2-7h3l2-4 2 4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </span>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Recent System Activity</h2>
+                    <p class="mt-0.5 text-sm text-slate-500">Latest updates and changes in the system.</p>
+                </div>
+            </div>
+            <a href="{{ route('admin.activity-log') }}" class="inline-flex items-center gap-1 rounded-lg border border-blue-200 px-3 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
+                View All <span aria-hidden="true">›</span>
+            </a>
+        </div>
+
+        <div class="relative p-5">
+            @if($recentActivities->isNotEmpty())
+                <div class="absolute bottom-8 left-10 top-8 w-px bg-slate-200"></div>
+            @endif
+            <div class="relative space-y-0">
+                @forelse($recentActivities as $activity)
+                    @php
+                        $action = strtolower($activity->action);
+                        $isDeleted = str_contains($action, 'deleted');
+                        $isUpdated = str_contains($action, 'updated');
+                        $isAdded = str_contains($action, 'added');
+                        $iconClasses = $isDeleted ? 'bg-rose-50 text-rose-500' : ($isUpdated ? 'bg-blue-50 text-blue-500' : ($isAdded ? 'bg-emerald-50 text-emerald-600' : 'bg-violet-50 text-violet-600'));
+                    @endphp
+                    <div class="relative flex items-center gap-4 border-b border-slate-100 py-5 last:border-b-0 first:pt-0 last:pb-0">
+                        <span class="relative z-10 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full {{ $iconClasses }}">
+                            @if($isDeleted)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            @elseif($isUpdated)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><path d="m4 20 4.5-1 9.8-9.8a2.1 2.1 0 0 0-3-3L5.5 16 4 20Z" stroke-linejoin="round" /><path d="m13.8 7.7 2.5 2.5" stroke-linecap="round" /></svg>
+                            @elseif($isAdded)
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><path d="M12 5v14M5 12h14" stroke-linecap="round" /></svg>
+                            @else
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            @endif
+                        </span>
+                        <p class="min-w-0 flex-1 font-semibold text-slate-800">{{ $activity->action }}</p>
+                        <span class="shrink-0 text-xs text-slate-500">{{ \Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}</span>
+                    </div>
+                @empty
+                    <p class="py-12 text-center text-sm text-slate-500">No recent system activity.</p>
+                @endforelse
+            </div>
+        </div>
+
+        <a href="{{ route('admin.activity-log') }}" class="flex items-center justify-center gap-2 border-t border-slate-100 px-5 py-4 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
+            View all activity logs <span aria-hidden="true">›</span>
+        </a>
+    </section>
 </div>
 
 @endsection
