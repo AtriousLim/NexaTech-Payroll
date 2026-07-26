@@ -88,15 +88,18 @@
     </select>
 
     <button
-        class="bg-blue-900 hover:bg-blue-800 text-white rounded-lg">
+        class="bg-blue-900 hover:bg-blue-800 text-white rounded-lg px-4 py-2">
 
         Apply Filters
 
     </button>
+    
 
 </form>
+
+
             <!--form of employee table-->
-    <div class="overflow-x-auto mt-8 border border-slate-200 rounded-xl bg-white shadow-sm">
+    <div class="overflow-x-auto mt-4 border border-slate-200 rounded-xl bg-white shadow-sm">
 
         <table class="min-w-full">
 
@@ -104,17 +107,17 @@
 
                 <tr>
 
-                    <th class="text-left p-4">Employee Code</th>
+                    <th class="text-left p-4 bg-gray-200">Employee Code</th>
 
-                    <th class="text-left p-4">Employee Name</th>
+                    <th class="text-left p-4 bg-gray-200">Employee Name</th>
 
-                    <th class="text-left p-4">Department</th>
+                    <th class="text-left p-4 bg-gray-200">Department</th>
 
-                    <th class="text-left p-4">Position</th>
+                    <th class="text-left p-4 bg-gray-200">Position</th>
 
-                    <th class="text-right p-4">Basic Salary</th>
+                    <th class="text-right p-4 bg-gray-200">Basic Salary</th>
 
-                    <th class="text-center p-4">Action</th>
+                    <th class="text-center p-4 bg-gray-200">Action</th>
 
                 </tr>
 
@@ -191,22 +194,27 @@
 
         <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div class="text-sm text-slate-600">
-                Showing {{ $employees->firstItem() ?? 0 }} to {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} employees
+                Showing {{ $employees->firstItem() ?? 0 }} to {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} records
             </div>
-            <div class="inline-flex overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-slate-200">
-                <a href="{{ $employees->previousPageUrl() ?? '#' }}"
-                   class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 {{ $employees->onFirstPage() ? 'pointer-events-none opacity-50' : '' }}"
-                   aria-label="Previous page">
-                    ‹
-                </a>
-                <span class="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-slate-900 bg-blue-100">
-                    {{ $employees->currentPage() }}
-                </span>
-                <a href="{{ $employees->nextPageUrl() ?? '#' }}"
-                   class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 {{ $employees->hasMorePages() ? '' : 'pointer-events-none opacity-50' }}"
-                   aria-label="Next page">
-                    ›
-                </a>
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <div class="text-sm text-slate-600 sm:mr-4">
+                    Page {{ $employees->currentPage() }} of {{ $employees->lastPage() }}
+                </div>
+                <div class="inline-flex overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-slate-200">
+                    <a href="{{ $employees->previousPageUrl() ?? '#' }}"
+                       class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 {{ $employees->onFirstPage() ? 'pointer-events-none opacity-50' : '' }}"
+                       aria-label="Previous page">
+                        ‹
+                    </a>
+                    <span class="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-slate-900 bg-blue-100">
+                        {{ $employees->currentPage() }}
+                    </span>
+                    <a href="{{ $employees->nextPageUrl() ?? '#' }}"
+                       class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 {{ $employees->hasMorePages() ? '' : 'pointer-events-none opacity-50' }}"
+                       aria-label="Next page">
+                        ›
+                    </a>
+                </div>
             </div>
         </div>
 
