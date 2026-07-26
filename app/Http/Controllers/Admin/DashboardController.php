@@ -14,7 +14,12 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard');
+        $recentActivities = DB::table('activity_logs')
+            ->orderByDesc('created_at')
+            ->limit(5)
+            ->get(['action', 'created_at']);
+
+        return view('admin.dashboard', compact('recentActivities'));
     }
 
     public function employees(Request $request)

@@ -185,39 +185,16 @@
         </div>
 
         <div class="p-5 space-y-4">
-
-            <div class="flex justify-between">
-
-                <span>Admin logged in</span>
-
-                <span class="text-slate-500">8:30 AM</span>
-
-            </div>
-
-            <div class="flex justify-between">
-
-                <span>Payroll generated</span>
-
-                <span class="text-slate-500">8:00 AM</span>
-
-            </div>
-
-            <div class="flex justify-between">
-
-                <span>Employee record updated</span>
-
-                <span class="text-slate-500">Yesterday</span>
-
-            </div>
-
-            <div class="flex justify-between">
-
-                <span>Backup completed</span>
-
-                <span class="text-slate-500">Yesterday</span>
-
-            </div>
-
+            @forelse($recentActivities as $activity)
+                <div class="flex items-start justify-between gap-4">
+                    <span class="text-slate-800">{{ $activity->action }}</span>
+                    <span class="shrink-0 text-sm text-slate-500">
+                        {{ \Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}
+                    </span>
+                </div>
+            @empty
+                <p class="text-sm text-slate-500">No recent system activity.</p>
+            @endforelse
         </div>
 
     </div>
