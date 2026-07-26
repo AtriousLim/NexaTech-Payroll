@@ -51,6 +51,10 @@ Route::middleware(['auth:admin'])->group(function () {
         [DashboardController::class,'storeEmployee'])
         ->name('admin.employees.store');
 
+    Route::get('/admin/employees/export/xml',
+        [DashboardController::class,'exportEmployeesXml'])
+        ->name('admin.employees.export.xml');
+
     Route::get('/admin/employees/{employee}',
         [DashboardController::class,'viewEmployee'])
         ->name('admin.employees.view');

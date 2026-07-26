@@ -2,20 +2,49 @@
 
 @section('content')
 
-<div class="bg-white rounded-xl shadow p-10">
+<div class="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">System history</p>
+            <h1 class="mt-2 text-3xl font-bold text-slate-900">Activity Log</h1>
+            <p class="mt-2 text-slate-600">Tracks administrator sign-ins and changes to employee and admin records.</p>
+        </div>
+        <span class="inline-flex w-fit rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
+            {{ $logs->total() }} {{ $logs->total() === 1 ? 'activity' : 'activities' }}
+        </span>
+    </div>
 
-    <h1 class="text-3xl font-bold text-blue-900">
+    @if($logs->isEmpty())
+        <div class="mt-8 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
+            <p class="font-semibold text-slate-700">No activity recorded yet.</p>
+            <p class="mt-2 text-sm text-slate-500">New administrator and employee actions will appear here.</p>
+        </div>
+    @else
+        <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-200">
+            <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+                <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <tr>
+                        <th class="px-5 py-4">Administrator</th>
+                        <th class="px-5 py-4">Action</th>
+                        <th class="px-5 py-4">Date and time</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 bg-white text-slate-700">
+                    @foreach($logs as $log)
+                        <tr>
+                            <td class="px-5 py-4 font-medium text-slate-900">{{ $log->admin_name ?? 'Deleted administrator' }}</td>
+                            <td class="px-5 py-4">{{ $log->action }}</td>
+                            <td class="px-5 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($log->created_at)->format('M d, Y g:i A') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        Activity Log
-
-    </h1>
-
-    <p class="mt-4 text-slate-600">
-
-        This module is working successfully.
-
-    </p>
-
+        <div class="mt-6">
+            {{ $logs->links() }}
+        </div>
+    @endif
 </div>
 
 @endsection
