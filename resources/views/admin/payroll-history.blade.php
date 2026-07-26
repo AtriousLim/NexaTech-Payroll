@@ -2,19 +2,101 @@
 
 @section('content')
 
-<div class="bg-white rounded-xl shadow p-10">
+<div class="space-y-6">
 
-    <h1 class="text-3xl font-bold text-blue-900">
+    @if(session('success'))
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
+            {{ session('success') }}
+        </div>
+    @endif
 
-        Payroll History
+    <!-- Header -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800">
+                Payroll History
+            </h1>
+            <p class="mt-1 text-slate-500">
+                View all previously confirmed and processed payroll records.
+            </p>
+        </div>
+    </div>
 
-    </h1>
+    <!-- History Table -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Employee</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Department</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Gross Pay</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Deductions</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Net Pay</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Processed Date</th>
+                        <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    @forelse($payrolls as $payroll)
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="font-semibold text-slate-800">
+                                    {{ $payroll->employee->first_name ?? 'N/A' }} 
+                                    {{ $payroll->employee->last_name ?? '' }}
+                                </div>
+                                <div class="text-xs text-slate-400">
+                                    {{ $payroll->employee->employee_code ?? '' }}
+                                </div>
+                            </td>
 
-    <p class="mt-4 text-slate-600">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                                {{ $payroll->employee->department->department_name ?? 'N/A' }}
+                            </td>
 
-        This module is working successfully.
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 font-medium">
+                                ₱{{ number_format($payroll->gross_pay ?? 0, 2) }}
+                            </td>
 
-    </p>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-rose-600 font-medium">
+                                -₱{{ number_format(
+                                    ($payroll->total_deductions ?? $payroll->total_deduction ?? 0) + 
+                                    $payroll->items->where('item_type', 'deduction')->sum('amount'), 
+                                    2 
+                                ) }}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-emerald-600 font-bold">
+                                ₱{{ number_format($payroll->net_pay ?? 0, 2) }}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                                {{ \Carbon\Carbon::parse($payroll->created_at)->format('M d, Y - h:i A') }}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
+                                    Processed
+                                </span>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-10 text-center text-slate-400">
+                                No payroll history found. Process a payroll to see records here.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if(method_exists($payrolls, 'links'))
+            <div class="p-4 border-t border-slate-200">
+                {{ $payrolls->links() }}
+            </div>
+        @endif
+    </div>
 
 </div>
 

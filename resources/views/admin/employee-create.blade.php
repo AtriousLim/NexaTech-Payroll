@@ -171,7 +171,7 @@
 
                         <div class="mt-5">
                             <label class="block text-sm font-medium text-slate-700">Salary</label>
-                            <input id="position_salary" type="text" readonly value="{{ old('position_id') ? ($positions->firstWhere('id', old('position_id'))->basic_salary ?? '') : '' }}" class="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
+                            <input id="position_salary" type="text" readonly data-salaries="{{ json_encode($positions->mapWithKeys(function($pos){ return [$pos->id => $pos->basic_salary]; })->toArray()) }}" value="{{ old('position_id') ? ($positions->firstWhere('id', old('position_id'))->basic_salary ?? '') : '' }}" class="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
                         </div>
                     </div>
 
@@ -188,7 +188,8 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     const positionSelect = document.getElementById('position_id');
                     const salaryInput = document.getElementById('position_salary');
-                    const salaries = @json($positions->mapWithKeys(function($pos){ return [$pos->id => $pos->basic_salary]; }));
+                    const salariesJSON = salaryInput.getAttribute('data-salaries');
+                    const salaries = salariesJSON ? JSON.parse(salariesJSON) : {};
 
                     function updateSalary() {
                         if (salaryInput && positionSelect) {

@@ -30,71 +30,66 @@
 
         </div>
 
-   
+    </div>
+
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
 
-    <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between">
 
-        <div>
+            <div>
 
-            <h2 class="text-2xl font-bold text-slate-800">
+                <h2 class="text-2xl font-bold text-slate-800">
 
-                {{ $employee->first_name }}
-                {{ $employee->last_name }}
+                    {{ $employee->first_name ?? '' }}
+                    {{ $employee->last_name ?? '' }}
 
-            </h2>
+                </h2>
 
-            <p class="text-slate-500 mt-1">
+                <p class="text-slate-500 mt-1">
 
-                {{ $employee->position->position_title }}
+                    {{ $employee->position?->position_title ?? 'N/A' }}
 
-                •
+                    •
 
-                {{ $employee->department->department_name }}
+                    {{ $employee->department?->department_name ?? 'N/A' }}
 
-            </p>
+                </p>
 
-        </div>
+            </div>
 
-        <div class="text-right">
+            <div class="text-right">
 
-            <p class="text-sm text-slate-500">
+                <p class="text-sm text-slate-500">
 
-                Employee Code
+                    Employee Code
 
-            </p>
+                </p>
 
-            <p class="font-semibold text-slate-700">
+                <p class="font-semibold text-slate-700">
 
-                {{ $employee->employee_code }}
+                    {{ $employee->employee_code ?? 'N/A' }}
 
-            </p>
+                </p>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
-  
     <hr class="my-6">
 
-    <form
-    method="POST"
-    action="{{ route('admin.payroll.process',$employee->id) }}">
-
+    <form method="POST" action="{{ route('admin.payroll.process', $employee) }}">
+    @csrf
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-    <p class="text-sm text-slate-500">
-
-       <p><strong>Department</strong></p>
-
-    </p>
+        <p class="text-sm text-slate-500"><strong>Department</strong></p>
 
         <h3 class="text-xl font-semibold text-slate-800 mt-1">
 
-        {{ $employee->department->department_name }}
+            {{ $employee->department?->department_name ?? 'N/A' }}
 
         </h3>
 
@@ -102,15 +97,11 @@
 
         <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-                <p><strong>Position</strong></p>
-
-            </p>
+            <p class="text-sm text-slate-500"><strong>Position</strong></p>
 
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
 
-                {{ $employee->position->position_title }}
+                {{ $employee->position?->position_title ?? 'N/A' }}
 
             </h3>
 
@@ -118,11 +109,7 @@
 
         <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-                 <p><strong>Present Days</strong></p>
-
-            </p>
+            <p class="text-sm text-slate-500"><strong>Present Days</strong></p>
 
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
 
@@ -134,11 +121,7 @@
 
         <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-                <p><strong>Late Minutes</strong></p>
-
-            </p>
+            <p class="text-sm text-slate-500"><strong>Late Minutes</strong></p>
 
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
 
@@ -150,9 +133,7 @@
 
         <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-            <p><strong>Overtime Minutes</strong></p>
+            <p class="text-sm text-slate-500"><strong>Overtime Minutes</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 {{ $overtimeMinutes }}
             </h3>
@@ -161,20 +142,16 @@
 
          <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-            <p><strong>Monthly Salary</strong></p>
+            <p class="text-sm text-slate-500"><strong>Monthly Salary</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($monthlySalary,2) }}
             </h3>
 
         </div>
-      
+
          <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-            <p><strong>Gross Pay</strong></p>
+            <p class="text-sm text-slate-500"><strong>Gross Pay</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($grossPay,2) }}
             </h3>
@@ -183,53 +160,47 @@
 
         <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-            <p class="text-sm text-slate-500">
-
-            <p><strong>Overtime Pay</strong></p>
+            <p class="text-sm text-slate-500"><strong>Overtime Pay</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($overtimePay,2) }}
             </h3>
 
         </div>
-        
+
     <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-          <p class="text-sm text-slate-500">
+        <p class="text-sm text-slate-500"><strong>Bonuses</strong></p>
 
-    <p><strong>Bonuses</strong></p>
+        @forelse($bonuses as $bonus)
 
-    @forelse($bonuses as $bonus)
+            <label class="flex items-center gap-2 mt-2">
 
-        <label class="flex items-center gap-2 mt-2">
+                <input
+                    type="checkbox"
+                    class="bonus-checkbox"
+                    data-amount="{{ $bonus->bonus_amount }}"
+                    name="bonuses[]"
+                    value="{{ $bonus->id }}">
 
-        
-            <input
-                type="checkbox"
-                class="bonus-checkbox"
-                data-amount="{{ $bonus->bonus_amount }}"
-                name="bonuses[]"
-                value="{{ $bonus->id }}">
+                {{ $bonus->bonus_name }}
 
-            {{ $bonus->bonus_name }}
+                (+₱{{ number_format($bonus->bonus_amount,2) }})
 
-            (+₱{{ number_format($bonus->bonus_amount,2) }})
+            </label>
 
-        </label>
+        @empty
 
-    @empty
+            <p class="text-slate-400">
+                No bonuses available.
+            </p>
 
-        <p class="text-slate-400">
-            No bonuses available.
-        </p>
-
-    @endforelse
+        @endforelse
 
     </div>
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-    <p class="text-sm text-slate-500">
-        <p><strong>Incentives</strong></p>
+        <p class="text-sm text-slate-500"><strong>Incentives</strong></p>
 
         @forelse($incentives as $incentive)
 
@@ -250,51 +221,47 @@
 
         @empty
 
-        <p class="text-slate-400">
-            No incentives available.
-        </p>
+            <p class="text-slate-400">
+                No incentives available.
+            </p>
 
-    @endforelse
+        @endforelse
 
     </div>
 
     <div class="bg-white border border-slate-200 rounded-xl p-5">
-          <p class="text-sm text-slate-500">
 
-    <p><strong>Deductions</strong></p>
+        <p class="text-sm text-slate-500"><strong>Deductions</strong></p>
 
-    
-    @forelse($deductions as $deduction)
+        @forelse($deductions as $deduction)
 
-        <label class="flex items-center gap-2 mt-2">
+            <label class="flex items-center gap-2 mt-2">
 
-           <input
-                type="checkbox"
-                class="deduction-checkbox"
-                data-amount="{{ $deduction->deduction_amount }}"
-                name="deductions[]"
-                value="{{ $deduction->id }}">
-            {{ $deduction->deduction_name }}
+               <input
+                    type="checkbox"
+                    class="deduction-checkbox"
+                    data-amount="{{ $deduction->deduction_amount }}"
+                    name="deductions[]"
+                    value="{{ $deduction->id }}">
+                {{ $deduction->deduction_name }}
 
-            (-₱{{ number_format($deduction->deduction_amount,2) }})
+                (-₱{{ number_format($deduction->deduction_amount,2) }})
 
-        </label>
+            </label>
 
-    @empty
+        @empty
 
-        <p class="text-slate-400">
-            No deductions available.
-        </p>
+            <p class="text-slate-400">
+                No deductions available.
+            </p>
 
-    @endforelse
+        @endforelse
 
     </div>
 
         <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-          <p class="text-sm text-slate-500">
-
-            <p><strong>Late Deduction</strong></p>
+            <p class="text-sm text-slate-500"><strong>Late Deduction</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($lateDeduction,2) }}
             </h3>
@@ -303,9 +270,7 @@
 
        <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-          <p class="text-sm text-slate-500">
-
-            <p><strong>SSS</strong></p>
+            <p class="text-sm text-slate-500"><strong>SSS</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($sss,2) }}
             </h3>
@@ -314,9 +279,7 @@
 
        <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-          <p class="text-sm text-slate-500">
-
-            <p><strong>PhilHealth</strong></p>
+            <p class="text-sm text-slate-500"><strong>PhilHealth</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($philhealth,2) }}
             </h3>
@@ -325,9 +288,7 @@
 
        <div class="bg-white border border-slate-200 rounded-xl p-5">
 
-          <p class="text-sm text-slate-500">
-
-            <p><strong>Pag-IBIG</strong></p>
+            <p class="text-sm text-slate-500"><strong>Pag-IBIG</strong></p>
             <h3 class="text-xl font-semibold text-slate-800 mt-1">
                 ₱{{ number_format($pagibig,2) }}
             </h3>
@@ -418,7 +379,9 @@
     </p>
 
     <button
-    class="mt-4 bg-blue-700 px-8 py-3 rounded-xl text-white">
+    type="submit"
+    onclick="return confirm('Are you sure you want to confirm and process this payroll?');"
+    class="mt-4 bg-blue-700 hover:bg-blue-800 transition px-8 py-3 rounded-xl text-white font-semibold cursor-pointer">
     Confirm Payroll
     </button>
 
@@ -429,52 +392,33 @@
 </div>
 
 <script>
+let gross = Number('{{ $grossPay ?? 0 }}');
+let overtime = Number('{{ $overtimePay ?? 0 }}');
+let late = Number('{{ $lateDeduction ?? 0 }}');
+let sss = Number('{{ $sss ?? 0 }}');
+let philhealth = Number('{{ $philhealth ?? 0 }}');
+let pagibig = Number('{{ $pagibig ?? 0 }}');
 
-let gross =
-{{ $grossPay }};
-
-let overtime =
-{{ $overtimePay }};
-
-let late =
-{{ $lateDeduction }};
-
-let sss =
-{{ $sss }};
-
-let philhealth =
-{{ $philhealth }};
-
-let pagibig =
-{{ $pagibig }};
-
-function updatePayroll(){
-
+function updatePayroll() {
     let bonusTotal = 0;
 
     document.querySelectorAll(".bonus-checkbox:checked")
-    .forEach(item=>{
-
+    .forEach(item => {
         bonusTotal += Number(item.dataset.amount);
-
     });
 
     let incentiveTotal = 0;
 
     document.querySelectorAll(".incentive-checkbox:checked")
-    .forEach(item=>{
-
+    .forEach(item => {
         incentiveTotal += Number(item.dataset.amount);
-
     });
 
     let deductionTotal = 0;
 
     document.querySelectorAll(".deduction-checkbox:checked")
-    .forEach(item=>{
-
+    .forEach(item => {
         deductionTotal += Number(item.dataset.amount);
-
     });
 
     let net =
@@ -497,31 +441,27 @@ function updatePayroll(){
         pagibig;
 
     document.getElementById("netPay").innerHTML =
-        net.toLocaleString(
+        '₱' + net.toLocaleString(
             undefined,
             {
-                minimumFractionDigits:2,
-                maximumFractionDigits:2
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             }
         );
-
 }
 
 document
 .querySelectorAll(
 ".bonus-checkbox,.incentive-checkbox,.deduction-checkbox"
 )
-.forEach(box=>{
-
+.forEach(box => {
     box.addEventListener(
         "change",
         updatePayroll
     );
-
 });
 
 updatePayroll();
-
 </script>
 
 @endsection
