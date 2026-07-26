@@ -39,12 +39,12 @@ class PayrollController extends Controller
 
         // Department
         if ($request->filled('department')) {
-            $query->where('department_id', $request->department);
+            $query->where('employees.department_id', $request->department);
         }
 
         // Position
         if ($request->filled('position')) {
-            $query->where('position_id', $request->position);
+            $query->where('employees.position_id', $request->position);
         }
 
         $query->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
