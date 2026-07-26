@@ -26,7 +26,8 @@ class DashboardController extends Controller
                       ->orWhere('first_name', 'LIKE', "%{$search}%")
                       ->orWhere('last_name', 'LIKE', "%{$search}%");
             })
-            ->get();
+            ->paginate(10)
+            ->appends($request->query());
 
         return view('admin.employee', compact('employees'));
     }

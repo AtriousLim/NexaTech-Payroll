@@ -41,27 +41,27 @@
         </form>
 
         <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p class="text-sm text-slate-600">Showing {{ $employees->count() }} {{ $employees->count() === 1 ? 'employee' : 'employees' }}</p>
-            <p class="text-sm text-slate-600">Total {{ $employees->count() }} records</p>
+            <p class="text-sm text-slate-600">Showing {{ $employees->firstItem() ?? 0 }} to {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} records</p>
+            <p class="text-sm text-slate-600">Page {{ $employees->currentPage() }} of {{ $employees->lastPage() }}</p>
         </div>
 
         <div class="overflow-x-auto mt-4 border border-slate-200 rounded-xl bg-white shadow-sm">
             @if($employees->count())
                 <table class="min-w-full divide-y divide-slate-200 text-sm text-black-700">
                     <thead class="bg-slate-50 text-black-600">
-                        <tr>
-                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Employee Code</th>
-                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Employee Name</th>
-                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Position</th>
-                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Department</th>
-                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Status</th>
-                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide">Action</th>
+                        <tr> <!-- Table headers for employee management -->
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide bg-gray-200">Employee Code</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide bg-gray-200">Employee Name</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide bg-gray-200">Position</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide bg-gray-200">Department</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide bg-gray-200">Status</th>
+                            <th class="px-6 py-4 text-left font-bold uppercase tracking-wide bg-gray-200">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-black-200 bg-white">
                         @foreach($employees as $employee)
                             <tr>
-                                <td class="px-6 py-4">{{ $employee->employee_code }}</td>
+                                <td class="px-6 py-4 ">{{ $employee->employee_code }}</td>
                                 <td class="px-6 py-4">{{ $employee->first_name }} {{ $employee->last_name }}</td>
                                 <td class="px-6 py-4">{{ $employee->position->position_title ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">{{ $employee->position->department->department_name ?? 'N/A' }}</td>
@@ -79,6 +79,25 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="text-sm text-slate-600">Navigate employee pages</p>
+                    <div class="inline-flex overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-slate-200">
+                        <a href="{{ $employees->previousPageUrl() ?? '#' }}"
+                           class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:pointer-events-none disabled:opacity-50 {{ $employees->onFirstPage() ? 'pointer-events-none opacity-50' : '' }}"
+                           aria-label="Previous page">
+                            ‹
+                        </a>
+                        <span class="inline-flex items-center justify-center px-6 py-2 text-sm font-semibold text-slate-900 bg-blue-100">
+                            {{ $employees->currentPage() }}
+                        </span>
+                        <a href="{{ $employees->nextPageUrl() ?? '#' }}"
+                           class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 {{ $employees->hasMorePages() ? '' : 'pointer-events-none opacity-50' }}"
+                           aria-label="Next page">
+                            ›
+                        </a>
+                    </div>
+                </div>
             @else
                 <div class="grid place-items-center gap-6 py-16 text-center">
                     <div class="inline-flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 text-sky-700">

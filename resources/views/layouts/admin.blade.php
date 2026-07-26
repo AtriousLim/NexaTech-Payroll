@@ -115,7 +115,7 @@
 
                 <div>
                     <h2 class="text-2xl font-bold text-slate-800">Payroll Management</h2>
-                    <p class="text-sm text-slate-500">{{ now()->format('F d, Y') }} · Friday</p>
+                    <p class="text-sm text-slate-500">{{ now()->format('F d, Y') }} · {{ now()->format('l') }}</p>
                 </div>
             </div>
 

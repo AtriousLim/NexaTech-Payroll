@@ -47,23 +47,18 @@ class PayrollController extends Controller
             $query->where('position_id', $request->position);
         }
 
-        $employees = $query->get();
-        
+        $query->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
+            ->select('employees.*');
 
-        // Sort after loading
-        if ($request->salary == 'low') {
-
-            $employees = $employees->sortBy(function ($employee) {
-                return $employee->position->basic_salary;
-            });
-
+        if ($request->salary === 'low') {
+            $query->orderBy('positions.basic_salary', 'asc');
         } else {
-
-            $employees = $employees->sortByDesc(function ($employee) {
-                return $employee->position->basic_salary;
-            });
-
+            $query->orderBy('positions.basic_salary', 'desc');
         }
+
+        $employees = $query
+            ->paginate(10)
+            ->appends($request->query());
 
         $departments = Department::orderBy('department_name')->get();
 
