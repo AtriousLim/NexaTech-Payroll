@@ -134,6 +134,21 @@
                                 <input type="text" name="nationality" value="{{ old('nationality') }}" placeholder="Filipino" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
                                 @error('nationality') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700">Contact Number *</label>
+                                <input type="tel" name="contact_number" value="{{ old('contact_number') }}" placeholder="+63 9XX XXX XXXX" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                @error('contact_number') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700">Gmail *</label>
+                                <input type="email" name="gmail" value="{{ old('gmail') }}" placeholder="employee@gmail.com" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                @error('gmail') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-sm font-medium text-slate-700">Address *</label>
+                                <textarea name="address" placeholder="Enter full address" rows="2" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">{{ old('address') }}</textarea>
+                                @error('address') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
+                            </div>
                         </div>
                     </div>
 
@@ -154,16 +169,18 @@
                         <div class="mt-5 grid gap-3 sm:grid-cols-2">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Department *</label>
-                                <input type="text" name="department" value="{{ old('department') }}" placeholder="Information Technology" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
-                                @error('department') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
+                                <select id="department_id" name="department_id" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                                    <option value="">-- Select department --</option>
+                                    @foreach($departments as $dept)
+                                        <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>{{ $dept->department_name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('department_id') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Position *</label>
-                                <select id="position_id" name="position_id" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
-                                    <option value="">-- Select position --</option>
-                                    @foreach($positions as $pos)
-                                        <option value="{{ $pos->id }}" {{ old('position_id') == $pos->id ? 'selected' : '' }}>{{ $pos->position_title }}</option>
-                                    @endforeach
+                                <select id="position_id" name="position_id" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" disabled>
+                                    <option value="">-- Select department first --</option>
                                 </select>
                                 @error('position_id') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
@@ -184,23 +201,81 @@
                 </div>
             </form>
 
+            <div id="salaries-data" data-salaries="{{ json_encode($positions->pluck('basic_salary', 'id')) }}"></div>
+            <div id="positions-by-department" data-positions="{{ json_encode($positionsByDepartment) }}"></div>
+
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
+                    const departmentSelect = document.getElementById('department_id');
                     const positionSelect = document.getElementById('position_id');
                     const salaryInput = document.getElementById('position_salary');
-                    const salariesJSON = salaryInput.getAttribute('data-salaries');
-                    const salaries = salariesJSON ? JSON.parse(salariesJSON) : {};
+                    
+                    const salariesData = document.getElementById('salaries-data');
+                    const positionsData = document.getElementById('positions-by-department');
+                    
+                    const salaries = JSON.parse(salariesData.getAttribute('data-salaries'));
+                    const positionsByDepartment = JSON.parse(positionsData.getAttribute('data-positions'));
+
+                    function updatePositions() {
+                        const selectedDepartment = departmentSelect.value;
+                        
+                        // Clear existing options except the first one
+                        while (positionSelect.options.length > 1) {
+                            positionSelect.remove(1);
+                        }
+
+                        if (!selectedDepartment) {
+                            positionSelect.disabled = true;
+                            positionSelect.options[0].text = '-- Select department first --';
+                            salaryInput.value = '';
+                            return;
+                        }
+
+                        const departmentPositions = positionsByDepartment[selectedDepartment] || [];
+                        
+                        if (departmentPositions.length === 0) {
+                            positionSelect.disabled = true;
+                            positionSelect.options[0].text = '-- No positions available --';
+                            salaryInput.value = '';
+                            return;
+                        }
+
+                        positionSelect.options[0].text = '-- Select position --';
+                        departmentPositions.forEach(function(pos) {
+                            const option = document.createElement('option');
+                            option.value = pos.id;
+                            option.text = pos.position_title;
+                            positionSelect.appendChild(option);
+                        });
+
+                        positionSelect.disabled = false;
+                        
+                        // Restore old selection if available
+                        const oldPositionId = '{{ old("position_id") }}';
+                        if (oldPositionId && positionsByDepartment[selectedDepartment].find(p => p.id == oldPositionId)) {
+                            positionSelect.value = oldPositionId;
+                        }
+                        
+                        updateSalary();
+                    }
 
                     function updateSalary() {
-                        if (salaryInput && positionSelect) {
+                        if (salaryInput && positionSelect.value) {
                             salaryInput.value = salaries[positionSelect.value] ?? '';
+                        } else {
+                            salaryInput.value = '';
                         }
                     }
 
-                    if (positionSelect) {
-                        positionSelect.addEventListener('change', updateSalary);
-                        updateSalary();
+                    // Restore department selection if available
+                    const oldDepartmentId = '{{ old("department_id") }}';
+                    if (oldDepartmentId) {
+                        departmentSelect.value = oldDepartmentId;
+                        updatePositions();
                     }
+
+                    departmentSelect.addEventListener('change', updatePositions);
+                    positionSelect.addEventListener('change', updateSalary);
                 });
             </script>
         </div>

@@ -106,8 +106,6 @@ CREATE TABLE `employees` (
   `address` varchar(255) NOT NULL,
   `contact_number` varchar(255) NOT NULL,
   `gmail` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'employee',
   `position_id` bigint(20) UNSIGNED NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'Active',
@@ -209,7 +207,6 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `employee_code` (`employee_code`),
   ADD UNIQUE KEY `gmail` (`gmail`),
-  ADD UNIQUE KEY `username` (`username`),
   ADD KEY `idx_employee_code` (`employee_code`),
   ADD KEY `position_id` (`position_id`);
 

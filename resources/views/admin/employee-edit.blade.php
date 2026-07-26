@@ -40,21 +40,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">Email</label>
+                        <label class="block text-sm font-medium text-slate-700">Gmail</label>
                         <input type="email" name="gmail" value="{{ old('gmail', $employee->gmail) }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
                         @error('gmail') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700">Username</label>
-                        <input type="text" name="username" value="{{ old('username', $employee->username) }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
-                        @error('username') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700">Password (leave blank to keep current)</label>
-                        <input type="password" name="password" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
-                        @error('password') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
