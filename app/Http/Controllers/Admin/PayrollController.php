@@ -102,9 +102,11 @@ class PayrollController extends Controller
             ->get();
         $departmentDeduction = $deductions->sum('deduction_amount');
 
-        $sss = 675;
-        $philhealth = 400;
-        $pagibig = 100;
+        // Calculate prorated statutory deductions based on days worked (22 working days per month)
+        $workDaysRatio = $presentDays / 22;
+        $sss = 675 * $workDaysRatio;
+        $philhealth = 400 * $workDaysRatio;
+        $pagibig = 100 * $workDaysRatio;
 
         $totalDeductions = $lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig;
         $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - $totalDeductions;
@@ -521,9 +523,11 @@ class PayrollController extends Controller
         $deductions = Deduction::whereIn('id', $selectedDeductions)->get();
         $departmentDeduction = $deductions->sum('deduction_amount');
 
-        $sss = 675;
-        $philhealth = 400;
-        $pagibig = 100;
+        // Calculate prorated statutory deductions based on days worked (22 working days per month)
+        $workDaysRatio = $presentDays / 22;
+        $sss = 675 * $workDaysRatio;
+        $philhealth = 400 * $workDaysRatio;
+        $pagibig = 100 * $workDaysRatio;
 
         $totalDeductions = $lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig;
         $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - $totalDeductions;

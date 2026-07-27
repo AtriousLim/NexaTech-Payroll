@@ -8,7 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         DB::statement('DROP TABLE IF EXISTS admins');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         DB::statement('CREATE TABLE admins (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

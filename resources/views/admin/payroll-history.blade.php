@@ -3,11 +3,17 @@
 @section('content')
 <div class="space-y-6">
     @if(session('success'))
-        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 font-medium text-emerald-800">{{ session('success') }}</div>
+        <div id="success-alert" class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 font-medium text-emerald-800">
+            {{ session('success') }}
+            <button type="button" onclick="this.parentElement.style.display='none'" class="float-right text-emerald-600 hover:text-emerald-800">✕</button>
+        </div>
     @endif
 
     @if(session('warning'))
-        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 font-medium text-amber-800">{{ session('warning') }}</div>
+        <div id="warning-alert" class="rounded-xl border border-amber-200 bg-amber-50 p-4 font-medium text-amber-800">
+            {{ session('warning') }}
+            <button type="button" onclick="this.parentElement.style.display='none'" class="float-right text-amber-600 hover:text-amber-800">✕</button>
+        </div>
     @endif
 
     <div class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:flex-row lg:items-center lg:justify-between">
@@ -84,6 +90,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Handle approve all form
     document.getElementById('approve-all-form')?.addEventListener('submit', function (event) {
         event.preventDefault();
         Swal.fire({
@@ -99,5 +106,28 @@
             }
         });
     });
+    
+    // Auto-dismiss success alerts after 5 seconds
+    const successAlert = document.getElementById('success-alert');
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.style.display = 'none';
+        }, 5000);
+        
+        // Mark this message as seen so it doesn't show again on refresh
+        if (sessionStorage.getItem('payroll-success-message-seen')) {
+            successAlert.style.display = 'none';
+        } else {
+            sessionStorage.setItem('payroll-success-message-seen', 'true');
+        }
+    }
+    
+    // Auto-dismiss warning alerts after 5 seconds
+    const warningAlert = document.getElementById('warning-alert');
+    if (warningAlert) {
+        setTimeout(() => {
+            warningAlert.style.display = 'none';
+        }, 5000);
+    }
 </script>
 @endsection
