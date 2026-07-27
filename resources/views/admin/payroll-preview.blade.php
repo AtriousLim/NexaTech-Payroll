@@ -79,7 +79,7 @@
 
     <hr class="my-6">
 
-    <form method="POST" action="{{ route('admin.payroll.process', $employee) }}">
+    <form method="POST" action="{{ route('admin.payroll.process', $employee) }}" id="payroll-preview-form">
     @csrf
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
@@ -380,7 +380,6 @@
 
     <button
     type="submit"
-    onclick="return confirm('Are you sure you want to confirm and process this payroll?');"
     class="mt-4 bg-blue-700 hover:bg-blue-800 transition px-8 py-3 rounded-xl text-white font-semibold cursor-pointer">
     Confirm Payroll
     </button>
@@ -391,6 +390,7 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 let gross = Number('{{ $grossPay ?? 0 }}');
 let overtime = Number('{{ $overtimePay ?? 0 }}');
@@ -462,6 +462,23 @@ document
 });
 
 updatePayroll();
+
+const form = document.getElementById('payroll-preview-form');
+form?.addEventListener('submit', function (event) {
+    event.preventDefault();
+    Swal.fire({
+        title: 'Confirm payroll processing?',
+        text: 'A payslip will be generated and the payroll will be saved. Continue?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, process payroll',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+});
 </script>
 
 @endsection

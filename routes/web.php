@@ -74,11 +74,14 @@ Route::middleware(['auth:admin'])->group(function () {
         [PayrollController::class, 'index'])
         ->name('admin.payroll');
 
+    Route::post('/admin/payroll/process-all', [PayrollController::class, 'processAll'])
+        ->name('admin.payroll.process-all');
+
     Route::get('/admin/positions/{department}', [PayrollController::class, 'getPositions'])
         ->name('admin.positions');
 
     Route::get('/admin/payroll/{employee}/preview', [PayrollController::class, 'preview'])
-        ->name('admin.payroll.preview');    
+        ->name('admin.payroll.preview');
 
     Route::post('/admin/payroll/{employee}/process', [PayrollController::class, 'process'])
         ->name('admin.payroll.process');
@@ -86,6 +89,24 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/payroll-history',
     [PayrollController::class, 'history'])
     ->name('admin.payroll-history');
+
+    Route::get('/admin/payroll-history/{payroll}/payslip', [PayrollController::class, 'showPayslip'])
+        ->name('admin.payroll.payslip');
+
+    Route::get('/admin/payroll-history/{payroll}/edit', [PayrollController::class, 'edit'])
+        ->name('admin.payroll.edit');
+
+    Route::put('/admin/payroll-history/{payroll}', [PayrollController::class, 'update'])
+        ->name('admin.payroll.update');
+
+    Route::post('/admin/payroll-history/{payroll}/approve', [PayrollController::class, 'approve'])
+        ->name('admin.payroll.approve');
+
+    Route::post('/admin/payroll-history/approve-all', [PayrollController::class, 'approveAllPending'])
+        ->name('admin.payroll.approve-all');
+
+    Route::delete('/admin/payroll-history/{payroll}', [PayrollController::class, 'destroy'])
+        ->name('admin.payroll.destroy');
 
     Route::get('/admin/activity-log',
         [DashboardController::class, 'activityLog'])

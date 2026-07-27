@@ -169,6 +169,48 @@
 
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@php
+    $flashMessages = [
+        'success' => session('success'),
+        'warning' => session('warning'),
+        'error' => session('error'),
+    ];
+@endphp
+<script>
+    const flashMessages = @json($flashMessages);
+
+    if (flashMessages.success) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: flashMessages.success,
+            timer: 2500,
+            showConfirmButton: false
+        });
+    }
+
+    if (flashMessages.warning) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Notice',
+            text: flashMessages.warning,
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+
+    if (flashMessages.error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: flashMessages.error,
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+</script>
+
 <footer class="bg-gray-200 text-center text-black py-5">
     © 2026 NexaTech Payroll Management System
 </footer>

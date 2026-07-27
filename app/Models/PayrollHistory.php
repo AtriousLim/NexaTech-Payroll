@@ -14,29 +14,23 @@ class PayrollHistory extends Model
         'cutoff_start',
         'cutoff_end',
         'gross_pay',
-        'overtime_pay',
-        'bonus_total',
-        'total_bonus',
-        'incentive_total',
-        'total_incentive',
-        'late_deduction',
-        'late_deductions',
-        'department_deduction',
-        'sss',
         'sss_deduction',
-        'philhealth',
         'philhealth_deduction',
-        'pagibig',
         'pagibig_deduction',
-        'total_deductions',
-        'total_deduction',
+        'late_deductions',
         'net_pay',
-        'status'
+        'status',
+        'payment_date',
     ];
 
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function payrollEntry()
+    {
+        return $this->hasOne(Payroll::class, 'employee_id', 'employee_id');
     }
 
     public function items()

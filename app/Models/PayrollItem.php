@@ -16,7 +16,8 @@ class PayrollItem extends Model
         'item_type',
         'item_name',
         'amount',
-        'remarks'
+        'remarks',
+        'reference_id',
     ];
 
     public function payroll()

@@ -18,12 +18,12 @@
 
         </div>
 
-        <button
-            class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-2 rounded-lg">
-
-            Pay All Employees
-
-        </button>
+        <form method="POST" action="{{ route('admin.payroll.process-all') }}" id="pay-all-form">
+            @csrf
+            <button type="submit" class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-2 rounded-lg">
+                Pay All Employees
+            </button>
+        </form>
 
     </div>
 
@@ -309,6 +309,26 @@ window.addEventListener('load', function () {
 
 });
 
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+const payAllForm = document.getElementById('pay-all-form');
+payAllForm?.addEventListener('submit', function (event) {
+    event.preventDefault();
+    Swal.fire({
+        title: 'Process payroll for all employees?',
+        text: 'A grouped payroll batch will be created for every employee and each will receive their own payroll records.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, process all',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            payAllForm.submit();
+        }
+    });
+});
 </script>
 
 @endsection
