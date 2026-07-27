@@ -91,6 +91,7 @@
                             </span>
                             <input type="password" name="password" placeholder="••••••••" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 pl-12 text-sm text-slate-900 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100" />
                         </div>
+                        <p class="mt-1 text-xs text-slate-400">Must be at least 8 characters and include a special character.</p>
                         @error('password') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
                     </div>
 
