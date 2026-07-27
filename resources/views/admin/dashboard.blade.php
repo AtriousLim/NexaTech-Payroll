@@ -16,8 +16,8 @@
         </div>
         <div>
             <p class="text-slate-500">Total Employees</p>
-            <h2 class="text-3xl font-bold text-blue-900 mt-2">156</h2>
-            <p class="text-emerald-500 mt-2">+8 this month</p>
+            <h2 class="text-3xl font-bold text-blue-900 mt-2">{{ $totalEmployees }}</h2>
+            <p class="text-emerald-500 mt-2">+{{ $newEmployeesThisMonth }} this month</p>
         </div>
     </div>
 
@@ -29,8 +29,8 @@
         </div>
         <div>
             <p class="text-slate-500">Active Employees</p>
-            <h2 class="text-3xl font-bold text-teal-600 mt-2">148</h2>
-            <p class="text-emerald-500 mt-2">94.8% Active</p>
+            <h2 class="text-3xl font-bold text-teal-600 mt-2">{{ $activeEmployees }}</h2>
+            <p class="text-emerald-500 mt-2">{{ $activePercentage }}% Active</p>
         </div>
     </div>
 
@@ -42,8 +42,8 @@
         </div>
         <div>
             <p class="text-slate-500">Payroll This Month</p>
-            <h2 class="text-3xl font-bold text-blue-900 mt-2">₱1,250,000</h2>
-            <p class="text-slate-500 mt-2">July Payroll</p>
+            <h2 class="text-3xl font-bold text-blue-900 mt-2">₱{{ number_format($payrollThisMonth, 0) }}</h2>
+            <p class="text-slate-500 mt-2">{{ now()->format('F') }} Payroll</p>
         </div>
     </div>
 
@@ -55,7 +55,7 @@
         </div>
         <div>
             <p class="text-slate-500">Pending Payroll</p>
-            <h2 class="text-3xl font-bold text-rose-500 mt-2">12</h2>
+            <h2 class="text-3xl font-bold text-rose-500 mt-2">{{ $pendingPayroll }}</h2>
             <p class="text-rose-500 mt-2">Needs Approval</p>
         </div>
     </div>
@@ -72,7 +72,7 @@
         </div>
         <div>
             <p class="text-slate-500">Departments</p>
-            <h2 class="text-3xl font-bold text-slate-900 mt-2">6</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mt-2">{{ $totalDepartments }}</h2>
             <p class="text-slate-500 mt-2">Total Departments</p>
         </div>
     </div>
@@ -85,7 +85,7 @@
         </div>
         <div>
             <p class="text-slate-500">Positions</p>
-            <h2 class="text-3xl font-bold text-slate-900 mt-2">18</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mt-2">{{ $totalPositions }}</h2>
             <p class="text-slate-500 mt-2">Total Positions</p>
         </div>
     </div>
@@ -98,7 +98,7 @@
         </div>
         <div>
             <p class="text-slate-500">Payroll Runs</p>
-            <h2 class="text-3xl font-bold text-slate-900 mt-2">24</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mt-2">{{ $payrollRunsThisYear }}</h2>
             <p class="text-slate-500 mt-2">This Year</p>
         </div>
     </div>
@@ -111,7 +111,7 @@
         </div>
         <div>
             <p class="text-slate-500">Next Payroll</p>
-            <h2 class="text-3xl font-bold text-slate-900 mt-2">Aug 1, 2026</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mt-2">{{ $nextPayroll->format('M d, Y') }}</h2>
             <p class="text-slate-500 mt-2">Upcoming Run</p>
         </div>
     </div>

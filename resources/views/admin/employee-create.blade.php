@@ -114,6 +114,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Gender *</label>
                                 <select name="gender" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                                    <option value="">-- Select gender --</option>
                                     <option value="Male" {{ old('gender') === 'Male' ? 'selected' : '' }}>Male</option>
                                     <option value="Female" {{ old('gender') === 'Female' ? 'selected' : '' }}>Female</option>
                                     <option value="Other" {{ old('gender') === 'Other' ? 'selected' : '' }}>Other</option>
@@ -123,15 +124,33 @@
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Civil status *</label>
                                 <select name="civil_status" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                                    <option value="">-- Select civil status --</option>
                                     <option value="Single" {{ old('civil_status') === 'Single' ? 'selected' : '' }}>Single</option>
                                     <option value="Married" {{ old('civil_status') === 'Married' ? 'selected' : '' }}>Married</option>
+                                    <option value="Divorced" {{ old('civil_status') === 'Divorced' ? 'selected' : '' }}>Divorced</option>
                                     <option value="Widowed" {{ old('civil_status') === 'Widowed' ? 'selected' : '' }}>Widowed</option>
                                 </select>
                                 @error('civil_status') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-slate-700">Nationality</label>
-                                <input type="text" name="nationality" value="{{ old('nationality') }}" placeholder="Filipino" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                <label class="block text-sm font-medium text-slate-700">Nationality *</label>
+                                <select name="nationality" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                                    <option value="">-- Select nationality --</option>
+                                    <option value="Filipino" {{ old('nationality') === 'Filipino' ? 'selected' : '' }}>Filipino</option>
+                                    <option value="American" {{ old('nationality') === 'American' ? 'selected' : '' }}>American</option>
+                                    <option value="British" {{ old('nationality') === 'British' ? 'selected' : '' }}>British</option>
+                                    <option value="Chinese" {{ old('nationality') === 'Chinese' ? 'selected' : '' }}>Chinese</option>
+                                    <option value="Japanese" {{ old('nationality') === 'Japanese' ? 'selected' : '' }}>Japanese</option>
+                                    <option value="Indian" {{ old('nationality') === 'Indian' ? 'selected' : '' }}>Indian</option>
+                                    <option value="Korean" {{ old('nationality') === 'Korean' ? 'selected' : '' }}>Korean</option>
+                                    <option value="Thai" {{ old('nationality') === 'Thai' ? 'selected' : '' }}>Thai</option>
+                                    <option value="Malaysian" {{ old('nationality') === 'Malaysian' ? 'selected' : '' }}>Malaysian</option>
+                                    <option value="Singaporean" {{ old('nationality') === 'Singaporean' ? 'selected' : '' }}>Singaporean</option>
+                                    <option value="Vietnamese" {{ old('nationality') === 'Vietnamese' ? 'selected' : '' }}>Vietnamese</option>
+                                    <option value="Australian" {{ old('nationality') === 'Australian' ? 'selected' : '' }}>Australian</option>
+                                    <option value="Canadian" {{ old('nationality') === 'Canadian' ? 'selected' : '' }}>Canadian</option>
+                                    <option value="Other" {{ old('nationality') === 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
                                 @error('nationality') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>

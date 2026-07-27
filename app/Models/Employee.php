@@ -16,13 +16,25 @@ class Employee extends Model
 
         'first_name',
 
+        'middle_name',
+
         'last_name',
+
+        'suffix',
 
         'address',
 
         'contact_number',
 
         'gmail',
+
+        'gender',
+
+        'civil_status',
+
+        'nationality',
+
+        'date_of_birth',
 
         'department_id',
 

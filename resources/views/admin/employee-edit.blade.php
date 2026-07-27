@@ -22,9 +22,21 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-medium text-slate-700">Middle name</label>
+                        <input type="text" name="middle_name" value="{{ old('middle_name', $employee->middle_name ?? '') }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
+                        @error('middle_name') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-slate-700">Last name</label>
                         <input type="text" name="last_name" value="{{ old('last_name', $employee->last_name) }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
                         @error('last_name') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Suffix</label>
+                        <input type="text" name="suffix" value="{{ old('suffix', $employee->suffix ?? '') }}" placeholder="e.g. Jr., Sr., III" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
+                        @error('suffix') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
@@ -43,6 +55,57 @@
                         <label class="block text-sm font-medium text-slate-700">Gmail</label>
                         <input type="email" name="gmail" value="{{ old('gmail', $employee->gmail) }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
                         @error('gmail') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Date of birth</label>
+                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $employee->date_of_birth) }}" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm" />
+                        @error('date_of_birth') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Gender</label>
+                        <select name="gender" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm">
+                            <option value="">-- Select gender --</option>
+                            <option value="Male" @if(old('gender') === 'Male' || strtolower($employee->gender ?? '') === 'male') selected @endif>Male</option>
+                            <option value="Female" @if(old('gender') === 'Female' || strtolower($employee->gender ?? '') === 'female') selected @endif>Female</option>
+                            <option value="Other" @if(old('gender') === 'Other' || strtolower($employee->gender ?? '') === 'other') selected @endif>Other</option>
+                        </select>
+                        @error('gender') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Civil status</label>
+                        <select name="civil_status" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm">
+                            <option value="">-- Select civil status --</option>
+                            <option value="Single" @if(old('civil_status') === 'Single' || strtolower($employee->civil_status ?? '') === 'single') selected @endif>Single</option>
+                            <option value="Married" @if(old('civil_status') === 'Married' || strtolower($employee->civil_status ?? '') === 'married') selected @endif>Married</option>
+                            <option value="Divorced" @if(old('civil_status') === 'Divorced' || strtolower($employee->civil_status ?? '') === 'divorced') selected @endif>Divorced</option>
+                            <option value="Widowed" @if(old('civil_status') === 'Widowed' || strtolower($employee->civil_status ?? '') === 'widowed') selected @endif>Widowed</option>
+                        </select>
+                        @error('civil_status') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Nationality</label>
+                        <select name="nationality" class="mt-1 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm">
+                            <option value="">-- Select nationality --</option>
+                            <option value="Filipino" {{ old('nationality', $employee->nationality) === 'Filipino' ? 'selected' : '' }}>Filipino</option>
+                            <option value="American" {{ old('nationality', $employee->nationality) === 'American' ? 'selected' : '' }}>American</option>
+                            <option value="British" {{ old('nationality', $employee->nationality) === 'British' ? 'selected' : '' }}>British</option>
+                            <option value="Chinese" {{ old('nationality', $employee->nationality) === 'Chinese' ? 'selected' : '' }}>Chinese</option>
+                            <option value="Japanese" {{ old('nationality', $employee->nationality) === 'Japanese' ? 'selected' : '' }}>Japanese</option>
+                            <option value="Indian" {{ old('nationality', $employee->nationality) === 'Indian' ? 'selected' : '' }}>Indian</option>
+                            <option value="Korean" {{ old('nationality', $employee->nationality) === 'Korean' ? 'selected' : '' }}>Korean</option>
+                            <option value="Thai" {{ old('nationality', $employee->nationality) === 'Thai' ? 'selected' : '' }}>Thai</option>
+                            <option value="Malaysian" {{ old('nationality', $employee->nationality) === 'Malaysian' ? 'selected' : '' }}>Malaysian</option>
+                            <option value="Singaporean" {{ old('nationality', $employee->nationality) === 'Singaporean' ? 'selected' : '' }}>Singaporean</option>
+                            <option value="Vietnamese" {{ old('nationality', $employee->nationality) === 'Vietnamese' ? 'selected' : '' }}>Vietnamese</option>
+                            <option value="Australian" {{ old('nationality', $employee->nationality) === 'Australian' ? 'selected' : '' }}>Australian</option>
+                            <option value="Canadian" {{ old('nationality', $employee->nationality) === 'Canadian' ? 'selected' : '' }}>Canadian</option>
+                            <option value="Other" {{ old('nationality', $employee->nationality) === 'Other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                        @error('nationality') <div class="mt-1 text-sm text-rose-600">{{ $message }}</div> @enderror
                     </div>
 
                     <div>

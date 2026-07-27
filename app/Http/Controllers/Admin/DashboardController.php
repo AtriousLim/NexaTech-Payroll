@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Department;
 use App\Models\PayrollHistory;
 use App\Models\Employee;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +16,38 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
+        // Employee Statistics
+        $totalEmployees = Employee::count();
+        $activeEmployees = Employee::where('status', 'active')->count();
+        $activePercentage = $totalEmployees > 0 ? round(($activeEmployees / $totalEmployees) * 100, 1) : 0;
+        $newEmployeesThisMonth = Employee::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        // Payroll Statistics
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+        $payrollThisMonth = PayrollHistory::whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->sum('gross_pay');
+        
+        $pendingPayroll = PayrollHistory::where('status', 'pending')->count();
+
+        // Department and Position Statistics
+        $totalDepartments = Department::count();
+        $totalPositions = \App\Models\Position::count();
+
+        // Payroll Runs (count distinct payroll periods)
+        $payrollRunsThisYear = DB::table('payroll_history')
+            ->whereYear('created_at', $currentYear)
+            ->selectRaw('COUNT(DISTINCT cutoff_start) as runs')
+            ->first()
+            ->runs ?? 0;
+
+        // Next Payroll (assuming monthly payroll on the 1st of next month)
+        $nextPayroll = now()->addMonth()->startOfMonth();
+
+        // Recent Activities and Payrolls
         $recentActivities = DB::table('activity_logs')
             ->orderByDesc('created_at')
             ->limit(5)
@@ -24,13 +57,27 @@ class DashboardController extends Controller
             ->orderByDesc('created_at')
             ->limit(3)
             ->get();
-            
-        return view('admin.dashboard', compact('recentActivities', 'recentPayrolls'));
+
+        return view('admin.dashboard', compact(
+            'totalEmployees',
+            'activeEmployees',
+            'activePercentage',
+            'newEmployeesThisMonth',
+            'payrollThisMonth',
+            'pendingPayroll',
+            'totalDepartments',
+            'totalPositions',
+            'payrollRunsThisYear',
+            'nextPayroll',
+            'recentActivities',
+            'recentPayrolls'
+        ));
     }
 
     public function employees(Request $request)
     {
         $employees = $this->filteredEmployees($request)
+            ->orderByDesc('id')
             ->paginate(10)
             ->appends($request->query());
 
@@ -206,10 +253,16 @@ class DashboardController extends Controller
     {
         $data = $request->validate([
             'first_name' => 'required|string|max:100',
+            'middle_name' => 'nullable|string|max:100',
             'last_name' => 'required|string|max:100',
+            'suffix' => 'nullable|string|max:50',
             'address' => 'required|string|max:255',
             'contact_number' => 'required|string|max:50',
             'gmail' => 'required|email|unique:employees,gmail,' . $employee->id,
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|in:Male,Female,Other',
+            'civil_status' => 'required|in:Single,Married,Divorced,Widowed',
+            'nationality' => 'required|string|max:100',
             'role' => 'nullable|string',
             'position_id' => 'required|exists:positions,id',
             'status' => 'required|in:Active,Inactive',
@@ -217,10 +270,17 @@ class DashboardController extends Controller
 
         $update = [
             'first_name' => $data['first_name'],
+            'middle_name' => $data['middle_name'] ?? null,
             'last_name' => $data['last_name'],
+            'suffix' => $data['suffix'] ?? null,
             'address' => $data['address'],
             'contact_number' => $data['contact_number'],
             'gmail' => $data['gmail'],
+            'date_of_birth' => $data['date_of_birth'],
+            'gender' => $data['gender'],
+            'civil_status' => $data['civil_status'],
+            'nationality' => $data['nationality'],
+            'employment_type' => $employee->employment_type,
             'role' => $data['role'] ?? $employee->role,
             'position_id' => $data['position_id'],
             'status' => $data['status'],
@@ -250,10 +310,18 @@ class DashboardController extends Controller
     {
         $data = $request->validate([
             'first_name' => 'required|string|max:100',
+            'middle_name' => 'nullable|string|max:100',
             'last_name' => 'required|string|max:100',
+            'suffix' => 'nullable|string|max:50',
             'address' => 'required|string|max:255',
             'contact_number' => 'required|string|max:50',
             'gmail' => 'required|email|unique:employees,gmail',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|in:Male,Female,Other',
+            'civil_status' => 'required|in:Single,Married,Divorced,Widowed',
+            'nationality' => 'required|string|max:100',
+            'employment_type' => 'nullable|string|max:100',
+            'hire_date' => 'nullable|date',
             'role' => 'nullable|string',
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
@@ -274,23 +342,36 @@ class DashboardController extends Controller
         $employeeCode = $this->generateEmployeeCode();
         $posId = $data['position_id'];
 
-        $employee = Employee::create([
-            'employee_code' => $employeeCode,
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'address' => $data['address'],
-            'contact_number' => $data['contact_number'],
-            'gmail' => $data['gmail'],
-            'department_id' => $data['department_id'],
-            'role' => $data['role'] ?? 'employee',
-            'position_id' => $posId,
-            'status' => $data['status'],
-        ]);
+        try {
+            $employee = Employee::create([
+                'employee_code' => $employeeCode,
+                'first_name' => $data['first_name'],
+                'middle_name' => $data['middle_name'] ?? null,
+                'last_name' => $data['last_name'],
+                'suffix' => $data['suffix'] ?? null,
+                'address' => $data['address'],
+                'contact_number' => $data['contact_number'],
+                'gmail' => $data['gmail'],
+                'date_of_birth' => $data['date_of_birth'],
+                'gender' => $data['gender'],
+                'civil_status' => $data['civil_status'],
+                'nationality' => $data['nationality'],
+                'employment_type' => $data['employment_type'] ?? null,
+                'department_id' => $data['department_id'],
+                'role' => $data['role'] ?? 'employee',
+                'position_id' => $posId,
+                'status' => $data['status'],
+            ]);
 
-        $this->logActivity("Added employee {$employee->employee_code} ({$employee->first_name} {$employee->last_name}).");
+            $this->logActivity("Added employee {$employee->employee_code} ({$employee->first_name} {$employee->last_name}).");
 
-        return redirect()->route('admin.employees')
-            ->with('success', 'Employee added successfully.');
+            return redirect()->route('admin.employees')
+                ->with('success', 'Employee added successfully.');
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors(['error' => 'Failed to create employee: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 
     protected function generateEmployeeCode()
