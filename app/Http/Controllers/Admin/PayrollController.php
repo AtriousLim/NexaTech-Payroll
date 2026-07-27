@@ -81,7 +81,7 @@ class PayrollController extends Controller
         $hourlyRate = $dailyRate / 8;
         $minuteRate = $hourlyRate / 60;
 
-        $grossPay = $dailyRate * $presentDays;
+        $grossPay = $monthlySalary;
         $lateDeduction = $minuteRate * $lateMinutes;
         $overtimePay = ($overtimeMinutes / 60) * $hourlyRate * 1.25;
 
@@ -102,11 +102,10 @@ class PayrollController extends Controller
             ->get();
         $departmentDeduction = $deductions->sum('deduction_amount');
 
-        // Calculate prorated statutory deductions based on days worked (22 working days per month)
-        $workDaysRatio = $presentDays / 22;
-        $sss = 675 * $workDaysRatio;
-        $philhealth = 400 * $workDaysRatio;
-        $pagibig = 100 * $workDaysRatio;
+        // Statutory deductions at full monthly rates
+        $sss = 675.00;
+        $philhealth = 400.00;
+        $pagibig = 100.00;
 
         $totalDeductions = $lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig;
         $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - $totalDeductions;
@@ -185,7 +184,7 @@ class PayrollController extends Controller
                     'status' => 'Pending',
                 ]);
 
-                $payrollEntry = Payroll::create($this->buildPayrollPayload($employee, $calculated, $cutoffStart, $cutoffEnd, $this->generatePayrollNumber()));
+                $payrollEntry = Payroll::create($this->buildPayrollPayload($employee, $calculated, $cutoffStart, $cutoffEnd, $this->generatePayrollNumber(), $payrollHistory->id));
 
                 $this->saveItems($payrollHistory, $calculated['selectedBonuses'], $calculated['selectedIncentives'], $calculated['selectedDeductions']);
             });
@@ -240,7 +239,7 @@ class PayrollController extends Controller
                         'status' => 'Pending',
                     ]);
 
-                    Payroll::create($this->buildPayrollPayload($employee, $calculated, $cutoffStart, $cutoffEnd, $this->generatePayrollNumber()));
+                    Payroll::create($this->buildPayrollPayload($employee, $calculated, $cutoffStart, $cutoffEnd, $this->generatePayrollNumber(), $payrollHistory->id));
 
                     $this->saveItems($payrollHistory, $calculated['selectedBonuses'], $calculated['selectedIncentives'], $calculated['selectedDeductions']);
                     $processedCount++;
@@ -287,7 +286,7 @@ class PayrollController extends Controller
         $hourlyRate = $dailyRate / 8;
         $minuteRate = $hourlyRate / 60;
 
-        $grossPay = $dailyRate * $presentDays;
+        $grossPay = $monthlySalary;
         $lateDeduction = $minuteRate * $lateMinutes;
         $overtimePay = ($overtimeMinutes / 60) * $hourlyRate * 1.25;
 
@@ -354,7 +353,7 @@ class PayrollController extends Controller
         $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - ($lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig);
 
         try {
-            DB::transaction(function () use ($payroll, $employee, $grossPay, $lateDeduction, $sss, $philhealth, $pagibig, $bonusTotal, $incentiveTotal, $departmentDeduction, $overtimePay, $netPay, $request) {
+            DB::transaction(function () use ($payroll, $grossPay, $lateDeduction, $sss, $philhealth, $pagibig, $bonusTotal, $incentiveTotal, $departmentDeduction, $overtimePay, $netPay, $request) {
                 $payroll->update([
                     'gross_pay' => round($grossPay, 2),
                     'sss_deduction' => round($sss, 2),
@@ -364,10 +363,7 @@ class PayrollController extends Controller
                     'net_pay' => round($netPay, 2),
                 ]);
 
-                $payrollEntry = Payroll::where('employee_id', $employee->id)
-                    ->where('pay_period_start', $payroll->cutoff_start)
-                    ->where('pay_period_end', $payroll->cutoff_end)
-                    ->first();
+                $payrollEntry = $payroll->payrollEntry;
 
                 if ($payrollEntry) {
                     $payrollEntry->update([
@@ -407,10 +403,7 @@ class PayrollController extends Controller
                     'payment_date' => now(),
                 ]);
 
-                $payrollEntry = Payroll::where('employee_id', $payroll->employee_id)
-                    ->where('pay_period_start', $payroll->cutoff_start)
-                    ->where('pay_period_end', $payroll->cutoff_end)
-                    ->first();
+                $payrollEntry = $payroll->payrollEntry;
 
                 if ($payrollEntry) {
                     $payrollEntry->update([
@@ -445,10 +438,7 @@ class PayrollController extends Controller
                         'payment_date' => now(),
                     ]);
 
-                    $payrollEntry = Payroll::where('employee_id', $payroll->employee_id)
-                        ->where('pay_period_start', $payroll->cutoff_start)
-                        ->where('pay_period_end', $payroll->cutoff_end)
-                        ->first();
+                    $payrollEntry = $payroll->payrollEntry;
 
                     if ($payrollEntry) {
                         $payrollEntry->update([
@@ -471,17 +461,14 @@ class PayrollController extends Controller
     {
         try {
             DB::transaction(function () use ($payroll) {
-                $payroll->items()->delete();
-                $payroll->delete();
-
-                $payrollEntry = Payroll::where('employee_id', $payroll->employee_id)
-                    ->where('pay_period_start', $payroll->cutoff_start)
-                    ->where('pay_period_end', $payroll->cutoff_end)
-                    ->first();
+                $payrollEntry = $payroll->payrollEntry;
 
                 if ($payrollEntry) {
                     $payrollEntry->delete();
                 }
+
+                $payroll->items()->delete();
+                $payroll->delete();
             });
         } catch (\Throwable $exception) {
             return back()->with('warning', 'The payroll could not be deleted.')->withErrors(['database' => $exception->getMessage()]);
@@ -497,17 +484,19 @@ class PayrollController extends Controller
     {
         $employee->load(['department', 'position']);
 
-        $attendance = Attendance::where('employee_id', $employee->id)->get();
-        $presentDays = $attendance->whereIn('status', ['Present', 'Late'])->count();
-        $lateMinutes = $attendance->sum('late_minutes');
-        $overtimeMinutes = $attendance->sum('overtime_minutes');
-
         $monthlySalary = $employee->position->basic_salary;
         $dailyRate = $monthlySalary / 22;
         $hourlyRate = $dailyRate / 8;
         $minuteRate = $hourlyRate / 60;
 
-        $grossPay = $dailyRate * $presentDays;
+        // Attendance used only for late deductions and overtime calculations
+        $attendance = Attendance::where('employee_id', $employee->id)->get();
+        $presentDays = $attendance->whereIn('status', ['Present', 'Late'])->count();
+        $lateMinutes = $attendance->sum('late_minutes');
+        $overtimeMinutes = $attendance->sum('overtime_minutes');
+
+        // Gross pay is the FULL monthly salary (not prorated by attendance days)
+        $grossPay = $monthlySalary;
         $lateDeduction = $minuteRate * $lateMinutes;
         $overtimePay = ($overtimeMinutes / 60) * $hourlyRate * 1.25;
 
@@ -523,11 +512,10 @@ class PayrollController extends Controller
         $deductions = Deduction::whereIn('id', $selectedDeductions)->get();
         $departmentDeduction = $deductions->sum('deduction_amount');
 
-        // Calculate prorated statutory deductions based on days worked (22 working days per month)
-        $workDaysRatio = $presentDays / 22;
-        $sss = 675 * $workDaysRatio;
-        $philhealth = 400 * $workDaysRatio;
-        $pagibig = 100 * $workDaysRatio;
+        // Statutory deductions at full monthly rates
+        $sss = 675.00;
+        $philhealth = 400.00;
+        $pagibig = 100.00;
 
         $totalDeductions = $lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig;
         $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - $totalDeductions;
@@ -550,10 +538,11 @@ class PayrollController extends Controller
         ];
     }
 
-    private function buildPayrollPayload(Employee $employee, array $calculated, string $cutoffStart, string $cutoffEnd, string $payrollNumber): array
+    private function buildPayrollPayload(Employee $employee, array $calculated, string $cutoffStart, string $cutoffEnd, string $payrollNumber, ?int $payrollHistoryId = null): array
     {
         $payload = [
             'employee_id' => $employee->id,
+            'payroll_history_id' => $payrollHistoryId,
             'basic_salary' => round((float) $employee->position?->basic_salary ?? 0, 2),
             'payroll_number' => $payrollNumber,
             'pay_period_start' => $cutoffStart,

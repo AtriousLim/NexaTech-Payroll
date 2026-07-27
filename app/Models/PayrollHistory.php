@@ -30,7 +30,7 @@ class PayrollHistory extends Model
 
     public function payrollEntry()
     {
-        return $this->hasOne(Payroll::class, 'employee_id', 'employee_id');
+        return $this->hasOne(Payroll::class, 'payroll_history_id', 'id');
     }
 
     public function items()
