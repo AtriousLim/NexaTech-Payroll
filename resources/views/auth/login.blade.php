@@ -7,13 +7,19 @@
     <title>NexaTech Payroll</title>
 
     @vite(['resources/css/app.css','resources/js/app.js'])
+    <style>
+        body {
+            background: url('{{ asset("images/lastt.png") }}') no-repeat center center fixed;
+            background-size: contain;
+            background-position: right center;
+            background-color: #0a1628;
+        }
+    </style>
 </head>
 
-<body class="relative min-h-screen overflow-hidden">
+<body class="min-h-screen">
 
-<img src="{{ asset('images/lastt.png') }}" alt="" class="absolute inset-0 h-full w-full object-cover">
-
-<div class="relative z-10 min-h-screen grid lg:grid-cols-2 overflow-hidden">
+<div class="min-h-screen grid lg:grid-cols-2">
 
     <!-- LEFT SIDE -->
 

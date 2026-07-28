@@ -88,22 +88,22 @@
                         <div class="mt-5 grid gap-3 sm:grid-cols-2">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">First name *</label>
-                                <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="Juan" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="Juan" pattern="[A-Za-z\s\.]+" title="Only letters, spaces, and periods allowed" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
                                 @error('first_name') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Middle name</label>
-                                <input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="Enter middle name (optional)" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                <input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="Enter middle name (optional)" pattern="[A-Za-z\s\.]+" title="Only letters, spaces, and periods allowed" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
                                 @error('middle_name') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Last name *</label>
-                                <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Dela Cruz" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Dela Cruz" pattern="[A-Za-z\s\.]+" title="Only letters, spaces, and periods allowed" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
                                 @error('last_name') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Suffix</label>
-                                <input type="text" name="suffix" value="{{ old('suffix') }}" placeholder="e.g. Jr., Sr., III" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                <input type="text" name="suffix" value="{{ old('suffix') }}" placeholder="e.g. Jr., Sr., III" pattern="[A-Za-z\s\.]+" title="Only letters, spaces, and periods allowed" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
                                 @error('suffix') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>
@@ -155,7 +155,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700">Contact Number *</label>
-                                <input type="tel" name="contact_number" value="{{ old('contact_number') }}" placeholder="+63 9XX XXX XXXX" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
+                                <input type="tel" name="contact_number" value="{{ old('contact_number') }}" placeholder="09XXXXXXXXX" pattern="[0-9]+" title="Numbers only" class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100" />
                                 @error('contact_number') <div class="mt-2 text-sm text-rose-600">{{ $message }}</div> @enderror
                             </div>
                             <div>

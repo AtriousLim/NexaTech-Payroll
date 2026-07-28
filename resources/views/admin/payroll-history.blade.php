@@ -59,21 +59,27 @@
                             </td>
                             <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-600">{{ $payroll->payment_date ? \Carbon\Carbon::parse($payroll->payment_date)->format('M d, Y h:i A') : 'Pending' }}</td>
                             <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-600">{{ $payroll->processed_by ? 'Admin #' . $payroll->processed_by : 'N/A' }}</td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="flex flex-wrap justify-center gap-2">
-                                    <a href="{{ route('admin.payroll.payslip', $payroll) }}" class="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100">View Payslip</a>
-                                    <a href="{{ route('admin.payroll.edit', $payroll) }}" class="rounded-lg border border-blue-300 px-3 py-1.5 text-sm font-semibold text-blue-700 hover:bg-blue-50">Edit Payroll</a>
-                                    @if($payroll->status !== 'Paid')
-                                        <form method="POST" action="{{ route('admin.payroll.approve', $payroll) }}" class="inline-block">
+<td class="px-6 py-4 text-center">
+                                <div class="flex flex-col gap-2">
+                                    {{-- Top row: View Payslip & Edit Payroll --}}
+                                    <div class="flex justify-center gap-2">
+<a href="{{ route('admin.payroll.payslip', $payroll) }}" class="rounded-md border border-slate-300 px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100">View Payslip</a>
+                                        <a href="{{ route('admin.payroll.edit', $payroll) }}" class="rounded-md border border-blue-300 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-50">Edit</a>
+                                    </div>
+                                    {{-- Bottom row: Approve & Delete --}}
+                                    <div class="flex justify-center gap-2">
+                                        @if($payroll->status !== 'Paid')
+                                            <form method="POST" action="{{ route('admin.payroll.approve', $payroll) }}" class="inline-block">
+                                                @csrf
+                                                <button type="submit" class="rounded-md bg-emerald-600 px-2 py-1 text-xs font-semibold text-white hover:bg-emerald-700">Approve</button>
+                                            </form>
+                                        @endif
+                                        <form method="POST" action="{{ route('admin.payroll.destroy', $payroll) }}" class="inline-block" onsubmit="return confirm('Delete this payroll record?');">
                                             @csrf
-                                            <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700">Approve</button>
+                                            @method('DELETE')
+                                            <button type="submit" class="rounded-md bg-rose-600 px-2 py-1 text-xs font-semibold text-white hover:bg-rose-700">Delete</button>
                                         </form>
-                                    @endif
-                                    <form method="POST" action="{{ route('admin.payroll.destroy', $payroll) }}" class="inline-block" onsubmit="return confirm('Delete this payroll record?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="rounded-lg bg-rose-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-rose-700">Delete</button>
-                                    </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

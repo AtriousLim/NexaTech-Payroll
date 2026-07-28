@@ -86,10 +86,77 @@
             </div>
         </div>
 
+        <div id="deduction-warning" class="hidden rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+            <strong>Deduction Limit Exceeded</strong>
+            <p id="deduction-warning-msg"></p>
+        </div>
+
         <div class="flex justify-end gap-3">
             <a href="{{ route('admin.payroll-history') }}" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700">Cancel</a>
-            <button type="submit" class="rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-white">Save Changes</button>
+            <button type="submit" id="payroll-submit-btn" class="rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-white">Save Changes</button>
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.querySelector('form');
+    var grossPayInput = document.querySelector('input[name="gross_pay"]');
+    var lateDeductionsInput = document.querySelector('input[name="late_deductions"]');
+    var sssInput = document.querySelector('input[name="sss_deduction"]');
+    var philhealthInput = document.querySelector('input[name="philhealth_deduction"]');
+    var pagibigInput = document.querySelector('input[name="pagibig_deduction"]');
+    var warningDiv = document.getElementById('deduction-warning');
+    var warningMsg = document.getElementById('deduction-warning-msg');
+    var submitBtn = document.getElementById('payroll-submit-btn');
+
+    var allDeductionInputs = [lateDeductionsInput, sssInput, philhealthInput, pagibigInput];
+
+    function getVal(input) {
+        return parseFloat(input.value) || 0;
+    }
+
+    function calculateTotalDeductions() {
+        return getVal(lateDeductionsInput) + getVal(sssInput) + getVal(philhealthInput) + getVal(pagibigInput);
+    }
+
+    function validateDeductions() {
+        var grossPay = getVal(grossPayInput);
+        var totalDeductions = calculateTotalDeductions();
+        var maxAllowed = grossPay * 0.25;
+
+        if (grossPay > 0 && totalDeductions > maxAllowed) {
+            warningMsg.innerHTML = 'Total deductions (P ' + totalDeductions.toFixed(2) + ') exceed the maximum allowed of 25% of gross pay (P ' + maxAllowed.toFixed(2) + '). Please reduce deductions so the employee keeps at least 75% of their salary.';
+            warningDiv.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            return false;
+        } else {
+            warningDiv.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            return true;
+        }
+    }
+
+    for (var i = 0; i < allDeductionInputs.length; i++) {
+        var inp = allDeductionInputs[i];
+        if (inp) {
+            inp.addEventListener('input', validateDeductions);
+        }
+    }
+    if (grossPayInput) {
+        grossPayInput.addEventListener('input', validateDeductions);
+    }
+
+    form.addEventListener('submit', function (e) {
+        if (!validateDeductions()) {
+            e.preventDefault();
+        }
+    });
+
+    validateDeductions();
+});
+</script>
 @endsection
+

@@ -244,20 +244,39 @@ class DashboardController extends Controller
 
     public function editEmployee(Employee $employee)
     {
-        $positions = DB::table('positions')->select('id','position_title')->get();
+        $positions = DB::table('positions')
+            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+            ->select('positions.id','positions.position_title','positions.basic_salary','positions.department_id')
+            ->get();
+        
+        $departments = DB::table('departments')->select('id','department_name')->get();
 
-        return view('admin.employee-edit', compact('employee', 'positions'));
+        $positionsByDepartment = [];
+        foreach ($positions as $pos) {
+            if (!isset($positionsByDepartment[$pos->department_id])) {
+                $positionsByDepartment[$pos->department_id] = [];
+            }
+            $positionsByDepartment[$pos->department_id][] = [
+                'id' => $pos->id,
+                'position_title' => $pos->position_title,
+                'basic_salary' => $pos->basic_salary
+            ];
+        }
+
+        $salaries = $positions->pluck('basic_salary', 'id');
+
+        return view('admin.employee-edit', compact('employee', 'positions', 'departments', 'positionsByDepartment', 'salaries'));
     }
 
     public function updateEmployee(Request $request, Employee $employee)
     {
         $data = $request->validate([
-            'first_name' => 'required|string|max:100',
-            'middle_name' => 'nullable|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'suffix' => 'nullable|string|max:50',
+            'first_name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s\.]+$/'],
+            'middle_name' => ['nullable', 'string', 'max:100', 'regex:/^[a-zA-Z\s\.]+$/'],
+            'last_name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s\.]+$/'],
+            'suffix' => ['nullable', 'string', 'max:50', 'regex:/^[a-zA-Z\s\.]+$/'],
             'address' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:50',
+            'contact_number' => ['required', 'string', 'max:50', 'regex:/^[0-9]+$/'],
             'gmail' => 'required|email|unique:employees,gmail,' . $employee->id,
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:Male,Female,Other',
@@ -309,12 +328,12 @@ class DashboardController extends Controller
     public function storeEmployee(Request $request)
     {
         $data = $request->validate([
-            'first_name' => 'required|string|max:100',
-            'middle_name' => 'nullable|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'suffix' => 'nullable|string|max:50',
+            'first_name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s\.]+$/'],
+            'middle_name' => ['nullable', 'string', 'max:100', 'regex:/^[a-zA-Z\s\.]+$/'],
+            'last_name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s\.]+$/'],
+            'suffix' => ['nullable', 'string', 'max:50', 'regex:/^[a-zA-Z\s\.]+$/'],
             'address' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:50',
+            'contact_number' => ['required', 'string', 'max:50', 'regex:/^[0-9]+$/'],
             'gmail' => 'required|email|unique:employees,gmail',
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:Male,Female,Other',

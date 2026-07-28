@@ -329,12 +329,12 @@ class PayrollController extends Controller
             'bonuses' => ['nullable', 'array'],
             'incentives' => ['nullable', 'array'],
             'deductions' => ['nullable', 'array'],
-            'gross_pay' => ['nullable', 'numeric'],
-            'late_deductions' => ['nullable', 'numeric'],
-            'sss_deduction' => ['nullable', 'numeric'],
-            'philhealth_deduction' => ['nullable', 'numeric'],
-            'pagibig_deduction' => ['nullable', 'numeric'],
-            'overtime_pay' => ['nullable', 'numeric'],
+            'gross_pay' => ['nullable', 'numeric', 'min:0'],
+            'late_deductions' => ['nullable', 'numeric', 'min:0'],
+            'sss_deduction' => ['nullable', 'numeric', 'min:0'],
+            'philhealth_deduction' => ['nullable', 'numeric', 'min:0'],
+            'pagibig_deduction' => ['nullable', 'numeric', 'min:0'],
+            'overtime_pay' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         $employee = $payroll->employee;
@@ -350,7 +350,18 @@ class PayrollController extends Controller
         $bonusTotal = (float) $calculated['bonusTotal'];
         $incentiveTotal = (float) $calculated['incentiveTotal'];
         $departmentDeduction = (float) $calculated['departmentDeduction'];
-        $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - ($lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig);
+
+        // Calculate total deductions (excluding bonuses and incentives which add to pay)
+        $totalDeductions = $lateDeduction + $departmentDeduction + $sss + $philhealth + $pagibig;
+        $maxDeductions = $grossPay * 0.25; // Max 25% of gross pay
+
+        if ($totalDeductions > $maxDeductions) {
+            return back()->withErrors([
+                'deductions' => 'Total deductions (₱' . number_format($totalDeductions, 2) . ') exceed the maximum allowed (25% of gross pay = ₱' . number_format($maxDeductions, 2) . '). Please reduce deductions so the employee keeps at least 75% of their salary.'
+            ])->withInput();
+        }
+
+        $netPay = $grossPay + $bonusTotal + $incentiveTotal + $overtimePay - $totalDeductions;
 
         try {
             DB::transaction(function () use ($payroll, $grossPay, $lateDeduction, $sss, $philhealth, $pagibig, $bonusTotal, $incentiveTotal, $departmentDeduction, $overtimePay, $netPay, $request) {
